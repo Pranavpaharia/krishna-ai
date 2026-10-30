@@ -1,0 +1,484 @@
+[
+  {
+    "theme": "anger",
+    "synonyms": [
+      "anger",
+      "angry",
+      "rage",
+      "furious",
+      "temper",
+      "shout",
+      "irritat",
+      "annoy",
+      "resent",
+      "snap at",
+      "lose my temper",
+      "provok",
+      "hostile",
+      "irritable",
+      "gussa",
+      "krodh"
+    ],
+    "verses": [
+      "BG-2.62",
+      "BG-2.63",
+      "BG-3.37",
+      "BG-16.21",
+      "BG-5.26"
+    ]
+  },
+  {
+    "theme": "grief",
+    "synonyms": [
+      "grief",
+      "grieving",
+      "grieve",
+      "sorrow",
+      "sadness",
+      "passed away",
+      "died",
+      "death",
+      "dying",
+      "cry",
+      "depress",
+      "despair",
+      "mourn",
+      "bereav",
+      "loss",
+      "lost someone",
+      "heartbreak",
+      "dukh",
+      "shok"
+    ],
+    "verses": [
+      "BG-2.20",
+      "BG-2.13",
+      "BG-2.27",
+      "BG-2.11",
+      "BG-8.6"
+    ]
+  },
+  {
+    "theme": "anxiety",
+    "synonyms": [
+      "anxiety",
+      "anxious",
+      "worried",
+      "worry",
+      "fear",
+      "afraid",
+      "scared",
+      "panic",
+      "overwhelm",
+      "insomnia",
+      "can't sleep",
+      "lie awake",
+      "the future",
+      "uncertainty",
+      "bechaini",
+      "chinta"
+    ],
+    "verses": [
+      "BG-6.5",
+      "BG-6.6",
+      "BG-2.47",
+      "BG-18.66",
+      "BG-4.10"
+    ]
+  },
+  {
+    "theme": "attachment",
+    "synonyms": [
+      "attachment",
+      "attached",
+      "letting go",
+      "let go",
+      "obsess",
+      "cling",
+      "someone who left",
+      "broke up",
+      "breakup",
+      "ex",
+      "can't move on",
+      "crave someone",
+      "relationship",
+      "moh",
+      "asakti"
+    ],
+    "verses": [
+      "SB-11.8.37",
+      "SB-11.8.44",
+      "SB-11.8.30",
+      "BG-2.62",
+      "BG-2.64"
+    ]
+  },
+  {
+    "theme": "failure",
+    "synonyms": [
+      "failure",
+      "failed",
+      "defeat",
+      "unsuccessful",
+      "give up",
+      "giving up",
+      "quit",
+      "hopeless",
+      "no results",
+      "worked hard but",
+      "rejected",
+      "fell short"
+    ],
+    "verses": [
+      "BG-2.47",
+      "BG-2.48",
+      "BG-18.47",
+      "BG-3.19"
+    ]
+  },
+  {
+    "theme": "indecision",
+    "synonyms": [
+      "indecision",
+      "confused",
+      "confuse",
+      "dilemma",
+      "cannot decide",
+      "can't decide",
+      "which path",
+      "don't know what to do",
+      "choice",
+      "guidance",
+      "want opposite things",
+      "torn between",
+      "sankalp"
+    ],
+    "verses": [
+      "BG-2.7",
+      "BG-18.63",
+      "BG-18.58",
+      "BG-4.34"
+    ]
+  },
+  {
+    "theme": "loneliness",
+    "synonyms": [
+      "lonely",
+      "loneliness",
+      "alone",
+      "isolated",
+      "no one understands",
+      "unseen",
+      "nobody cares",
+      "invisible",
+      "akelapan"
+    ],
+    "verses": [
+      "BG-6.30",
+      "BG-9.29",
+      "BG-10.20",
+      "BG-7.18"
+    ]
+  },
+  {
+    "theme": "insult",
+    "synonyms": [
+      "insult",
+      "insulted",
+      "humiliat",
+      "criticis",
+      "tolerate",
+      "mocked",
+      "belittl",
+      "disrespect",
+      "put down",
+      "shamed",
+      "judged",
+      "apman"
+    ],
+    "verses": [
+      "SB-11.23.2",
+      "SB-11.23.42",
+      "BG-12.13",
+      "BG-12.18",
+      "BG-5.18"
+    ]
+  },
+  {
+    "theme": "purpose",
+    "synonyms": [
+      "purpose",
+      "meaning",
+      "meaningless",
+      "why am i here",
+      "point of life",
+      "point in it",
+      "no point",
+      "wasting my life",
+      "calling"
+    ],
+    "verses": [
+      "BG-18.46",
+      "BG-3.9",
+      "BG-18.66"
+    ]
+  },
+  {
+    "theme": "family conflict",
+    "synonyms": [
+      "family",
+      "parents",
+      "father",
+      "mother",
+      "brother",
+      "sister",
+      "relatives",
+      "caught in the middle",
+      "fight with my family",
+      "expectations"
+    ],
+    "verses": [
+      "SB-11.17.44",
+      "BG-1.43"
+    ]
+  },
+  {
+    "theme": "restless mind",
+    "synonyms": [
+      "restless mind",
+      "can't concentrate",
+      "cannot concentrate",
+      "focus",
+      "distract",
+      "mind wanders",
+      "won't sit still",
+      "sit quietly",
+      "thoughts keep running",
+      "meditat",
+      "attention",
+      "disciplin"
+    ],
+    "verses": [
+      "BG-6.26",
+      "BG-6.35",
+      "BG-6.34",
+      "BG-6.5"
+    ]
+  },
+  {
+    "theme": "lust and senses",
+    "synonyms": [
+      "lust",
+      "temptation",
+      "craving",
+      "addict",
+      "senses",
+      "indriya",
+      "desire",
+      "can't stop",
+      "going back to",
+      "harm me",
+      "compulsive",
+      "stimulation"
+    ],
+    "verses": [
+      "BG-3.37",
+      "BG-3.39",
+      "BG-2.70",
+      "BG-3.41"
+    ]
+  },
+  {
+    "theme": "ego",
+    "synonyms": [
+      "ego",
+      "proud",
+      "pride",
+      "arrogant",
+      "boast",
+      "superior",
+      "humble",
+      "vanit",
+      "take credit",
+      "show off",
+      "importance",
+      "ahankar"
+    ],
+    "verses": [
+      "BG-3.27",
+      "SB-11.23.30",
+      "BG-18.17"
+    ]
+  },
+  {
+    "theme": "envy",
+    "synonyms": [
+      "jealous",
+      "envy",
+      "envious",
+      "comparing myself",
+      "other's success",
+      "irshya"
+    ],
+    "verses": [
+      "BG-12.13",
+      "BG-16.19"
+    ]
+  },
+  {
+    "theme": "laziness",
+    "synonyms": [
+      "lazy",
+      "laziness",
+      "procrastinat",
+      "motivation",
+      "sloth",
+      "tamas",
+      "no drive",
+      "can't start",
+      "keep putting off",
+      "aalas",
+      "sust"
+    ],
+    "verses": [
+      "BG-18.39",
+      "BG-3.8",
+      "BG-6.16"
+    ]
+  },
+  {
+    "theme": "guilt",
+    "synonyms": [
+      "guilt",
+      "guilty",
+      "ashamed",
+      "regret",
+      "sin",
+      "past mistakes",
+      "forgive",
+      "things i did",
+      "can't forgive myself",
+      "sharm"
+    ],
+    "verses": [
+      "BG-18.66",
+      "BG-9.30",
+      "BG-4.36"
+    ]
+  },
+  {
+    "theme": "stress and burnout",
+    "synonyms": [
+      "stress",
+      "stressed",
+      "pressure",
+      "burnout",
+      "burned out",
+      "exhausted",
+      "overworked",
+      "drained",
+      "too much to handle",
+      "thak"
+    ],
+    "verses": [
+      "BG-6.5",
+      "BG-2.48",
+      "BG-6.17",
+      "BG-3.19"
+    ]
+  },
+  {
+    "theme": "work and duty",
+    "synonyms": [
+      "duty",
+      "work",
+      "action",
+      "karma",
+      "result",
+      "fruit",
+      "career",
+      "job",
+      "responsib",
+      "should i work for"
+    ],
+    "verses": [
+      "BG-2.47",
+      "BG-2.48",
+      "BG-3.19",
+      "BG-18.46"
+    ]
+  },
+  {
+    "theme": "faith and surrender",
+    "synonyms": [
+      "surrender",
+      "faith",
+      "trust",
+      "devotion",
+      "bhakti",
+      "pray",
+      "giving up on life",
+      "keep my faith",
+      "life keeps hitting",
+      "shraddha"
+    ],
+    "verses": [
+      "BG-18.66",
+      "BG-12.8",
+      "BG-12.10"
+    ]
+  },
+  {
+    "theme": "equanimity",
+    "synonyms": [
+      "calm",
+      "peace",
+      "equanim",
+      "steady",
+      "serene",
+      "stay calm",
+      "everything going wrong",
+      "even keel"
+    ],
+    "verses": [
+      "BG-2.48",
+      "BG-6.17",
+      "BG-5.18"
+    ]
+  },
+  {
+    "theme": "god's presence",
+    "synonyms": [
+      "god",
+      "krishna",
+      "everywhere",
+      "omnipresent",
+      "presence",
+      "temple",
+      "is god real",
+      "does god see me"
+    ],
+    "verses": [
+      "BG-9.29",
+      "BG-10.20",
+      "BG-6.30"
+    ]
+  },
+  {
+    "theme": "fear of death",
+    "synonyms": [
+      "afraid of dying",
+      "fear of death",
+      "death is coming",
+      "mortality",
+      "what happens after death",
+      "bhay",
+      "mrityu"
+    ],
+    "verses": [
+      "BG-2.13",
+      "BG-2.20",
+      "BG-8.6"
+    ]
+  }
+]
