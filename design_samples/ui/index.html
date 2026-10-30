@@ -1,0 +1,426 @@
+<!doctype html>
+<!--
+  Krishna chat UI — token-remap preview.
+  Design system: warm-editorial (light) + claude warm dark surfaces.
+  The component tree is unchanged from krsna_ai/web/index.html; only the
+  semantic --od-* layer is remapped. Every hex lives in :root.
+
+  Fixes applied vs the current UI:
+  1. cool navy -> warm neutral surfaces
+  2. 22px blur shadow -> ring shadow (flat 0 / raised 1)
+  3. gradient hero blob -> single-stroke mark, no gradient anywhere
+  4. accent uses per screen: 6 -> 2
+  5. verse translation card: rounded box + colored left border (P0) -> plain block
+  6. emoji glyph -> inline SVG icon
+  7. radius 26px -> 24px max; Devanagari face + leading overrides
+-->
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Krishna chat UI — warm-editorial remap (light + dark)</title>
+  <style>
+    :root {
+      /* light — warm-editorial */
+      --l-bg:      #fbf6ee;
+      --l-surface: #fffdf8;
+      --l-surface-soft: #f1e3cf;
+      --l-fg:      #201914;
+      --l-fg-2:    #4c4037;
+      --l-muted:   #7a6d63;
+      --l-border:  #ded2c3;
+      --l-border-soft: #eee4d7;
+      --l-accent:  #9b5b32;
+      /* #9b5b32 under white text measures 4.31:1 — under the 4.5:1 body threshold.
+         Same hue, darkened for filled buttons only: 6.33:1. Text accent stays #9b5b32 (4.96:1). */
+      --l-accent-fill: #8a5029;
+      --l-accent-contrast: #fffdf8;
+      --l-success: #4f8a4f;
+      --l-warn:    #c9822f;
+
+      /* dark — claude warm dark surfaces */
+      --d-bg:      #141413;
+      --d-surface: #30302e;
+      --d-surface-soft: #232321;
+      --d-fg:      #f5f4ed;
+      --d-fg-2:    #d8d6cd;
+      --d-muted:   #87867f;
+      --d-border:  #3d3d3a;
+      --d-border-soft: #30302e;
+      --d-accent:  #c9822f;
+      --d-accent-fill: #c9822f;      /* 5.91:1 as text on #141413 */
+      --d-accent-contrast: #211806;  /* 5.61:1 as a button label */
+      --d-success: #6fbd77;
+      --d-warn:    #d99a4a;
+
+      /* active surface */
+      --od-color-bg: var(--l-bg);
+      --od-color-surface: var(--l-surface);
+      --od-color-surface-soft: var(--l-surface-soft);
+      --od-color-text: var(--l-fg);
+      --od-color-text-2: var(--l-fg-2);
+      --od-color-muted: var(--l-muted);
+      --od-color-border: var(--l-border);
+      --od-color-border-soft: var(--l-border-soft);
+      --od-color-accent: var(--l-accent);
+      --od-color-accent-fill: var(--l-accent-fill);
+      --od-color-accent-contrast: var(--l-accent-contrast);
+      --od-color-success: var(--l-success);
+      --od-color-warn: var(--l-warn);
+
+      /* Noto Serif Devanagari is not installed on this host; 'Nirmala UI' is the
+         only Devanagari-capable face present (sans), so it is named explicitly to
+         keep the fallback deterministic rather than browser-random. Install
+         Noto Serif Devanagari to restore the serif intent for Devanagari lines. */
+      --od-font-display: 'Noto Serif Devanagari', 'Nirmala UI', Georgia, 'Times New Roman', serif;
+      --od-font-body: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --od-font-mono: 'SF Mono', ui-monospace, Menlo, monospace;
+
+      /* type scale — multiplicative 1.25 */
+      --od-text-caption: 11px;
+      --od-text-small:   13px;
+      --od-text-body:    16px;
+      --od-text-lead:    20px;
+      --od-text-h3:      22px;
+      --od-text-h2:      28px;
+
+      --od-leading-body: 1.62;
+      --od-leading-tight: 1.1;
+      --od-leading-deva-body: 1.75;   /* CJK/Devanagari override */
+      --od-leading-deva-display: 1.35;
+      --od-tracking-display: -0.025em;
+
+      /* space — proximity contract */
+      --od-space-group: 10px;   /* 8–12 within a group */
+      --od-space-block: 36px;   /* 32–48 between groups */
+      --od-space-pad:   16px;   /* Common Region minimum */
+      --od-space-24:    24px;
+
+      --od-radius-sm: 10px;
+      --od-radius-md: 16px;
+      --od-radius-lg: 24px;      /* capped — was 26px */
+      --od-radius-pill: 9999px;
+
+      /* elevation — two levels only */
+      --od-elev-flat: none;
+      --od-elev-ring: 0 0 0 1px var(--od-color-border);
+      --od-elev-raised: 0 2px 16px rgba(32, 25, 20, 0.06);
+
+      --od-motion: 180ms cubic-bezier(0.2, 0, 0, 1);
+      --od-target: 44px;         /* iOS touch target */
+      --od-target-min: 24px;     /* WCAG 2.2 SC 2.5.8 */
+      --od-container-max: 1180px;
+    }
+
+    [data-theme="dark"] {
+      --od-color-bg: var(--d-bg);
+      --od-color-surface: var(--d-surface);
+      --od-color-surface-soft: var(--d-surface-soft);
+      --od-color-text: var(--d-fg);
+      --od-color-text-2: var(--d-fg-2);
+      --od-color-muted: var(--d-muted);
+      --od-color-border: var(--d-border);
+      --od-color-border-soft: var(--d-border-soft);
+      --od-color-accent: var(--d-accent);
+      --od-color-accent-fill: var(--d-accent-fill);
+      --od-color-accent-contrast: var(--d-accent-contrast);
+      --od-color-success: var(--d-success);
+      --od-color-warn: var(--d-warn);
+      --od-elev-raised: 0 2px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--od-color-bg);
+      color: var(--od-color-text);
+      font-family: var(--od-font-body);
+      font-size: var(--od-text-body);
+      line-height: var(--od-leading-body);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page { width: min(var(--od-container-max), calc(100vw - 48px)); margin: 0 auto; padding: 48px 0 64px; }
+
+    /* ─── header ────────────────────────────────────────────────────── */
+    .page-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; }
+    .page-head h1 {
+      font-family: var(--od-font-display);
+      font-size: var(--od-text-h2);
+      line-height: var(--od-leading-tight);
+      letter-spacing: var(--od-tracking-display);
+      margin: 0;
+      font-weight: 500;
+    }
+    .toggle {
+      display: flex; gap: 8px;
+      border: 1px solid var(--od-color-border);
+      border-radius: var(--od-radius-sm);
+      padding: 4px;
+    }
+    .toggle button {
+      min-height: var(--od-target);
+      padding: 0 14px;
+      border: 0; background: transparent;
+      font-family: var(--od-font-mono); font-size: var(--od-text-small);
+      color: var(--od-color-muted); cursor: pointer;
+      border-radius: 8px;
+    }
+    .toggle button[aria-pressed="true"] { background: var(--od-color-surface-soft); color: var(--od-color-text); }
+
+    /* ─── token map ─────────────────────────────────────────────────── */
+    .token-map { margin-top: 24px; border-collapse: collapse; width: 100%; font-family: var(--od-font-mono); font-size: var(--od-text-small); }
+    .token-map th, .token-map td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--od-color-border-soft); }
+    .token-map th { color: var(--od-color-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--od-text-caption); }
+    .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: middle; margin-right: 8px; box-shadow: 0 0 0 1px var(--od-color-border); }
+
+    /* ─── app shell ─────────────────────────────────────────────────── */
+    .app-shell {
+      margin-top: var(--od-space-block);
+      background: var(--od-color-surface);
+      border: 1px solid var(--od-color-border);
+      border-radius: var(--od-radius-lg);
+      padding: var(--od-space-24);
+      box-shadow: var(--od-elev-ring);
+    }
+
+    .hero { display: flex; gap: var(--od-space-group); align-items: center; }
+    .mark { width: 28px; height: 28px; flex: 0 0 28px; }
+    .mark path { fill: none; stroke: var(--od-color-accent); stroke-width: 1.5; stroke-linecap: round; }
+    .eyebrow {
+      font-family: var(--od-font-mono);
+      font-size: var(--od-text-caption);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--od-color-accent);
+      margin: 0 0 4px;
+    }
+    .hero h2 {
+      font-family: var(--od-font-display);
+      font-size: var(--od-text-h2);
+      line-height: var(--od-leading-tight);
+      letter-spacing: var(--od-tracking-display);
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) 348px; gap: var(--od-space-block); margin-top: var(--od-space-block); }
+
+    /* ─── chat ──────────────────────────────────────────────────────── */
+    .chat-card { display: flex; flex-direction: column; gap: var(--od-space-block); }
+    .msg { max-width: 88%; padding: var(--od-space-24); border-radius: var(--od-radius-md); background: var(--od-color-surface-soft); }
+    .msg.you { background: var(--od-color-surface-soft); box-shadow: var(--od-elev-ring); }
+    .msg.krsna { background: var(--od-color-bg); box-shadow: var(--od-elev-ring); }
+    .msg p { margin: 0; white-space: pre-wrap; }
+    .message-meta {
+      font-family: var(--od-font-mono);
+      font-size: var(--od-text-caption);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--od-color-muted);
+      margin: 0 0 var(--od-space-group);
+    }
+
+    /* citation state — semantic colour carries the dot, text stays high-contrast */
+    .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: var(--od-space-group); }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      min-height: var(--od-target-min);
+      padding: 0 10px;
+      border: 1px solid var(--od-color-border);
+      border-radius: var(--od-radius-sm);
+      font-family: var(--od-font-mono);
+      font-size: var(--od-text-small);
+      color: var(--od-color-text-2);
+      background: var(--od-color-surface);
+    }
+    .badge i { width: 8px; height: 8px; border-radius: 999px; background: var(--od-color-success); }
+    .badge.warn i { background: var(--od-color-warn); }
+
+    .ref-button {
+      min-height: var(--od-target-min);
+      padding: 0 12px;
+      border: 1px solid var(--od-color-border);
+      border-radius: var(--od-radius-pill);
+      background: transparent;
+      font-family: var(--od-font-mono);
+      font-size: var(--od-text-small);
+      color: var(--od-color-text);
+      cursor: pointer;
+    }
+
+    /* ─── verse card ────────────────────────────────────────────────── */
+    .verse-card {
+      align-self: start;
+      background: var(--od-color-bg);
+      border: 1px solid var(--od-color-border);
+      border-radius: var(--od-radius-md);
+      padding: var(--od-space-24);
+      box-shadow: var(--od-elev-ring);
+    }
+    .verse-kicker {
+      font-family: var(--od-font-mono);
+      font-size: var(--od-text-caption);
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: var(--od-color-muted);
+      margin: 0 0 var(--od-space-group);
+    }
+    .verse-ref {
+      font-family: var(--od-font-display);
+      font-size: var(--od-text-h3);
+      line-height: var(--od-leading-tight);
+      letter-spacing: var(--od-tracking-display);
+      font-weight: 500;
+      margin: 0 0 var(--od-space-block);
+    }
+    .verse-deva {
+      font-family: var(--od-font-display);
+      font-size: var(--od-text-lead);
+      line-height: var(--od-leading-deva-display);
+      margin: 0 0 var(--od-space-block);
+    }
+    /* P0 fix: no rounded box with a coloured left border — plain block, hairline rule */
+    .verse-translation {
+      font-family: var(--od-font-display);
+      font-size: var(--od-text-body);
+      line-height: var(--od-leading-deva-body);
+      margin: 0;
+      padding-top: var(--od-space-group);
+      border-top: 1px solid var(--od-color-border-soft);
+    }
+    .source-note {
+      margin-top: var(--od-space-block);
+      font-family: var(--od-font-mono);
+      font-size: var(--od-text-small);
+      color: var(--od-color-muted);
+    }
+
+    /* ─── composer ──────────────────────────────────────────────────── */
+    .composer { display: grid; grid-template-columns: 1fr auto; gap: var(--od-space-group); margin-top: var(--od-space-block); }
+    .composer input {
+      min-height: var(--od-target);
+      padding: 12px 14px;
+      border: 1px solid var(--od-color-border);
+      border-radius: var(--od-radius-sm);
+      background: var(--od-color-bg);
+      color: var(--od-color-text);
+      font-family: var(--od-font-body);
+      font-size: var(--od-text-body);
+    }
+    .composer input:focus { outline: none; box-shadow: 0 0 0 3px rgba(155, 91, 50, 0.24); }
+    .button {
+      min-height: var(--od-target);
+      padding: 0 18px;
+      border: 0;
+      border-radius: var(--od-radius-sm);
+      background: var(--od-color-accent-fill);
+      color: var(--od-color-accent-contrast);
+      font-family: var(--od-font-body);
+      font-size: var(--od-text-body);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .notes-list { margin-top: var(--od-space-block); font-size: var(--od-text-small); color: var(--od-color-muted); }
+    .notes-list li { margin-bottom: 6px; }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="page-head">
+      <h1>Krishna — Ask, and be still</h1>
+      <div class="toggle" role="group" aria-label="Surface">
+        <button type="button" data-set="light" aria-pressed="true">light</button>
+        <button type="button" data-set="dark" aria-pressed="false">dark</button>
+      </div>
+    </header>
+
+    <table class="token-map">
+      <thead><tr><th>semantic token</th><th>light</th><th>dark</th></tr></thead>
+      <tbody>
+        <tr><td>--od-color-bg</td><td><span class="swatch" style="background: var(--l-bg)"></span>#fbf6ee</td><td><span class="swatch" style="background: var(--d-bg)"></span>#141413</td></tr>
+        <tr><td>--od-color-surface</td><td><span class="swatch" style="background: var(--l-surface)"></span>#fffdf8</td><td><span class="swatch" style="background: var(--d-surface)"></span>#30302e</td></tr>
+        <tr><td>--od-color-text</td><td><span class="swatch" style="background: var(--l-fg)"></span>#201914 · 16.1:1</td><td><span class="swatch" style="background: var(--d-fg)"></span>#f5f4ed · 16.7:1</td></tr>
+        <tr><td>--od-color-muted</td><td><span class="swatch" style="background: var(--l-muted)"></span>#7a6d63 · 4.65:1</td><td><span class="swatch" style="background: var(--d-muted)"></span>#87867f · 5.05:1</td></tr>
+        <tr><td>--od-color-accent</td><td><span class="swatch" style="background: var(--l-accent)"></span>#9b5b32 · 4.96:1</td><td><span class="swatch" style="background: var(--d-accent)"></span>#c9822f · 5.91:1</td></tr>
+        <tr><td>--od-color-accent-fill</td><td><span class="swatch" style="background: var(--l-accent-fill)"></span>#8a5029 · 6.33:1 on label</td><td><span class="swatch" style="background: var(--d-accent-fill)"></span>#c9822f · 5.61:1 on label</td></tr>
+        <tr><td>--od-elev-raised</td><td>y+2 / blur 16 / fg 6%</td><td>y+2 / blur 16 / black 35%</td></tr>
+      </tbody>
+    </table>
+
+    <section class="app-shell">
+      <div class="hero">
+        <svg class="mark" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3c2.6 3.2 4.2 6.2 4.2 9.2 0 3.4-1.9 6.2-4.2 8.6-2.3-2.4-4.2-5.2-4.2-8.6C7.8 9.2 9.4 6.2 12 3z"></path>
+          <path d="M12 12.2c1.6-1.4 3.2-2.2 4.8-2.4M12 12.2c-1.6-1.4-3.2-2.2-4.8-2.4"></path>
+        </svg>
+        <div>
+          <p class="eyebrow">Grounded on two books</p>
+          <h2>Ask, and be still</h2>
+        </div>
+      </div>
+
+      <div class="layout">
+        <div class="chat-card">
+          <article class="msg you">
+            <p class="message-meta">You</p>
+            <p>Any advice on the stock tips a friend sent me?</p>
+          </article>
+
+          <article class="msg krsna">
+            <p class="message-meta">Krishna</p>
+            <p>The teachings do not speak of this. I will not invent a verse to answer it.
+
+The nearest teaching is this: one who acts without clinging to the result is not shaken by gain or loss — SB 11.8.11, and BG 9.31 holds the same shape. That is about your attachment to the outcome, not about the tip.</p>
+            <div class="badges">
+              <span class="badge"><i></i>references verified</span>
+              <span class="badge warn"><i></i>nearest teaching, labelled as nearest</span>
+            </div>
+          </article>
+        </div>
+
+        <aside class="verse-card">
+          <p class="verse-kicker">Reference</p>
+          <p class="verse-ref">BG 2.47</p>
+          <p class="verse-deva">कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।</p>
+          <p class="verse-translation">You have a right to perform your prescribed duty, but you are not entitled to the fruits of action.</p>
+          <p class="source-note">PDF p. 118 · stored translation, verbatim</p>
+          <p><button class="ref-button" type="button">open page</button></p>
+        </aside>
+      </div>
+
+      <form class="composer">
+        <input type="text" placeholder="Ask something you are carrying" aria-label="Question" />
+        <button class="button" type="submit">Ask</button>
+      </form>
+
+      <ul class="notes-list">
+        <li>Accent appears twice per screen: the eyebrow and the Ask button. Citation state uses semantic colour on the dot only.</li>
+        <li>Elevation is two levels: ring at rest, raised on hover. No blur shadow at rest.</li>
+        <li>Proximity: 10px inside a group, 36px between groups, 16px minimum Common Region padding.</li>
+        <li>Targets: 44px button, 24px minimum for badges and reference pills.</li>
+        <li>Verse card is a plain block with a hairline rule — no rounded box with a coloured left border.</li>
+        <li>Devanāgarī gets its own face and leading (1.35 display / 1.75 body); Georgia carries no Devanagari glyphs.</li>
+        <li>One documented exception to the palette: the filled button uses the accent darkened to #8a5029 on light, because #9b5b32 under white text measures 4.31:1 — under the 4.5:1 body threshold. Text accent stays #9b5b32.</li>
+        <li>Sample copy is illustrative — the live app renders verbatim stored translations from data/verses.jsonl.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll('.toggle button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        document.documentElement.setAttribute('data-theme', b.dataset.set);
+        document.querySelectorAll('.toggle button').forEach(function (o) {
+          o.setAttribute('aria-pressed', String(o === b));
+        });
+      });
+    });
+  </script>
+</body>
+</html>
