@@ -1,0 +1,32 @@
+{"question": "I keep getting angry at my coworkers and then I feel ashamed afterwards.", "expected": ["BG-2.62", "BG-2.63", "BG-18.66"], "note": "anger chain + atonement"}
+{"question": "My father passed away last year and I still cry at night.", "expected": ["BG-2.20", "BG-2.13", "BG-2.11"], "note": "grief / soul does not die"}
+{"question": "I am attached to a person who no longer wants to be in my life.", "expected": ["SB-11.8.37", "SB-11.8.44", "SB-11.8.30"], "note": "attachment, Pingala teaching"}
+{"question": "My mind won't sit still during meditation; it runs everywhere.", "expected": ["BG-6.26", "BG-6.35", "BG-6.34"], "note": "restless mind"}
+{"question": "I am anxious about the future and can't sleep.", "expected": ["BG-6.5", "BG-6.6", "BG-2.47"], "note": "anxiety / work without result"}
+{"question": "I failed an exam and want to give up on everything.", "expected": ["BG-2.47", "BG-2.48", "BG-18.47", "BG-3.19"], "note": "failure / duty without fruit"}
+{"question": "I don't know which path to take - my parents want one thing and I want another.", "expected": ["BG-2.7", "BG-18.63", "SB-11.17.44", "BG-1.43"], "note": "indecision + family conflict"}
+{"question": "I feel lonely even when people are around me.", "expected": ["BG-6.30", "BG-9.29", "BG-10.20", "BG-7.18"], "note": "loneliness / presence of the Lord"}
+{"question": "People insult me at work and I can't stop replaying it.", "expected": ["SB-11.23.2", "SB-11.23.42", "BG-12.13", "BG-12.18", "BG-5.18"], "note": "insult / equal vision"}
+{"question": "What am I actually here for? I feel my work is meaningless.", "expected": ["BG-18.46", "BG-3.9", "BG-18.66"], "note": "purpose of life"}
+{"question": "I am addicted to my phone and can't stop craving stimulation.", "expected": ["BG-3.37", "BG-3.39", "BG-2.70", "BG-3.41"], "note": "craving / sense control"}
+{"question": "I keep procrastinating and have no motivation.", "expected": ["BG-18.39", "BG-3.8", "BG-6.16"], "note": "laziness / modes of nature"}
+{"question": "I am proud of my achievements but I know it is ego.", "expected": ["BG-3.27", "SB-11.23.30", "BG-18.17"], "note": "false ego"}
+{"question": "I feel jealous of my friend's success.", "expected": ["BG-12.13", "BG-16.19"], "note": "envy"}
+{"question": "I am exhausted and burned out from constant pressure.", "expected": ["BG-6.5", "BG-2.48", "BG-6.17", "BG-3.19"], "note": "stress / balance"}
+{"question": "I feel guilty about things I did years ago.", "expected": ["BG-18.66", "BG-9.30", "BG-4.36"], "note": "guilt / purification"}
+{"question": "Should I work for the results or just do my duty?", "expected": ["BG-2.47", "BG-2.48", "BG-3.19"], "note": "karma without fruit"}
+{"question": "How do I grieve without falling into despair?", "expected": ["BG-2.20", "BG-2.11", "BG-2.27"], "note": "grief regulation"}
+{"question": "I am afraid of dying.", "expected": ["BG-2.13", "BG-2.20", "BG-8.6"], "note": "fear of death / time of death"}
+{"question": "How can I stay calm when everything is going wrong?", "expected": ["BG-2.48", "BG-6.17", "BG-5.18"], "note": "equanimity"}
+{"question": "What does real surrender to God actually look like?", "expected": ["BG-18.66", "BG-12.8", "BG-12.10"], "note": "surrender"}
+{"question": "Why does Krishna say the wise do not grieve for the living or the dead?", "expected": ["BG-2.20"], "note": "canonical verse, exact topic"}
+{"question": "What is the chain that turns a thought into anger?", "expected": ["BG-2.62", "BG-2.63"], "note": "delusion chain"}
+{"question": "What does the story of Pingala the courtesan teach about attachment?", "expected": ["SB-11.8.30", "SB-11.8.37", "SB-11.8.44"], "note": "Uddhava-gita chapter 8"}
+{"question": "How should I respond when someone insults me?", "expected": ["SB-11.23.2", "SB-11.23.42"], "note": "Uddhava-gita on insult"}
+{"question": "My family fights over religion and I am caught in the middle.", "expected": ["SB-11.17.44", "BG-1.43"], "note": "family conflict"}
+{"question": "I can't focus on anything for more than a few minutes.", "expected": ["BG-6.26", "BG-6.34", "BG-6.35"], "note": "concentration"}
+{"question": "Is God everywhere or only in the temple?", "expected": ["BG-9.29", "BG-10.20", "BG-6.30"], "note": "omnipresence"}
+{"question": "I want to stop being lazy and start practicing.", "expected": ["BG-3.8", "BG-6.16", "BG-18.39"], "note": "laziness"}
+{"question": "Everyone says I should be humble but I keep feeling superior.", "expected": ["BG-18.17", "BG-3.27", "SB-11.23.30"], "note": "pride"}
+{"question": "What should I do when I am too stressed to think clearly?", "expected": ["BG-2.48", "BG-6.17", "BG-6.5"], "note": "stress and clarity"}
+{"question": "How do I keep my faith when life keeps hitting me?", "expected": ["BG-6.5", "BG-6.6", "BG-18.66"], "note": "faith / support"}
