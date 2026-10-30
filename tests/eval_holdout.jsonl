@@ -1,0 +1,12 @@
+{"question": "My team keeps provoking me and I snap at people I care about afterwards.", "expected": ["BG-2.62", "BG-2.63"], "note": "anger chain, no literal 'anger'"}
+{"question": "It has been a year since my mother died and the sadness still hits me at night.", "expected": ["BG-2.20", "BG-2.11", "BG-2.13"], "note": "grief, paraphrased"}
+{"question": "I can't stop thinking about an ex who has already moved on.", "expected": ["SB-11.8.37", "SB-11.8.44"], "note": "attachment, no literal 'attached'"}
+{"question": "I want to sit quietly but my thoughts keep running.", "expected": ["BG-6.26", "BG-6.34", "BG-6.35"], "note": "restless mind, no 'meditation'"}
+{"question": "I lie awake worrying about what might happen tomorrow.", "expected": ["BG-6.5", "BG-6.6", "BG-2.47"], "note": "anxiety + sleep"}
+{"question": "I did not get the result I worked for and I want to quit.", "expected": ["BG-2.47", "BG-2.48", "BG-18.47"], "note": "failure paraphrase"}
+{"question": "Two people I love want opposite things from me.", "expected": ["BG-2.7", "BG-18.63", "SB-11.17.44"], "note": "indecision / family pull"}
+{"question": "I feel unseen even in a crowded room.", "expected": ["BG-6.30", "BG-9.29"], "note": "loneliness paraphrase"}
+{"question": "My boss put me down in front of everyone and I keep replaying it.", "expected": ["SB-11.23.2", "SB-11.23.42", "BG-12.13"], "note": "insult tolerance paraphrase"}
+{"question": "I do the same tasks every day and see no point in them.", "expected": ["BG-18.46", "BG-3.9"], "note": "purpose paraphrase"}
+{"question": "I keep going back to things I know harm me.", "expected": ["BG-3.37", "BG-3.39", "BG-2.70"], "note": "senses/addiction paraphrase"}
+{"question": "I take credit for things that went well and it feels empty.", "expected": ["BG-3.27", "BG-18.17", "SB-11.23.30"], "note": "ego paraphrase"}
