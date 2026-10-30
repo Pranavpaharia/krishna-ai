@@ -1,0 +1,44 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+# Generated data — rebuild with:
+#   python -m krsna_ai.ingest.extract_gita
+#   python -m krsna_ai.ingest.extract_uddhava
+#   python -m krsna_ai.ingest.build_index
+# Curated verse stores are committed; the generated index is not
+data/*.npz
+
+# Source PDFs — large, personal copies; not for version control
+*.pdf
+
+# Temporary PDF probes and extraction scratch files
+_tmp_*.py
+_tmp_*.txt
+_tmp_gita_pages/
+
+# Test battery output (regenerate with: python tests/battery.py)
+battery_output.txt
+
+# Local ACL recovery artifacts
+acl-recovery-meta/
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Runtime artifacts and probes
+data/audit.jsonl
+server_test.log
+scratch/
