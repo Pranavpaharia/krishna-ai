@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Krishna — Ask, and be still</title>
+<style>
+  /*
+    Open Design-ready token layer
+    -----------------------------
+    Semantic tokens are intentionally separated from component styles.
+    A future Open Design integration can remap these variables without
+    rewriting the chat, reference, or verse-card components.
+  */
+  :root {
+    --od-color-bg: #0d1328;
+    --od-color-bg-2: #17233f;
+    --od-color-surface: rgba(28, 39, 72, .92);
+    --od-color-surface-soft: rgba(38, 51, 91, .78);
+    --od-color-surface-user: #315087;
+    --od-color-text: #f6efdd;
+    --od-color-text-muted: #bfc7da;
+    --od-color-accent: #e8b64c;
+    --od-color-accent-strong: #f3cd78;
+    --od-color-accent-ink: #211806;
+    --od-color-success: #63c98a;
+    --od-color-warning: #e49a52;
+    --od-color-danger: #ef7d7d;
+    --od-color-border: rgba(232, 182, 76, .24);
+    --od-color-border-soft: rgba(255, 255, 255, .10);
+
+    --od-font-display: Georgia, "Times New Roman", serif;
+    --od-font-body: Inter, ui-sans-system, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+    --od-radius-sm: 12px;
+    --od-radius-md: 18px;
+    --od-radius-lg: 26px;
+    --od-radius-pill: 999px;
+
+    --od-space-1: 6px;
+    --od-space-2: 10px;
+    --od-space-3: 14px;
+    --od-space-4: 20px;
+    --od-space-5: 28px;
+    --od-space-6: 40px;
+
+    --od-shadow-card: 0 22px 70px rgba(0, 0, 0, .34);
+    --od-shadow-soft: 0 12px 34px rgba(0, 0, 0, .22);
+    --od-max-width: 1180px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--od-color-text);
+    font-family: var(--od-font-body);
+    background:
+      radial-gradient(circle at 18% -8%, rgba(232, 182, 76, .24), transparent 34rem),
+      radial-gradient(circle at 88% 8%, rgba(73, 111, 190, .30), transparent 32rem),
+      linear-gradient(145deg, var(--od-color-bg), var(--od-color-bg-2) 58%, #0a0f22);
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: .18;
+    background-image:
+      radial-gradient(circle, rgba(246, 239, 221, .55) 0 1px, transparent 1.4px);
+    background-size: 34px 34px;
+    mask-image: linear-gradient(to bottom, black, transparent 72%);
+  }
+
+  .app-shell {
+    position: relative;
+    width: min(var(--od-max-width), calc(100% - 32px));
+    margin: 0 auto;
+    padding: 28px 0 36px;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: var(--od-space-4);
+    align-items: center;
+    margin-bottom: var(--od-space-4);
+    padding: clamp(20px, 4vw, 36px);
+    border: 1px solid var(--od-color-border);
+    border-radius: var(--od-radius-lg);
+    background: linear-gradient(135deg, rgba(35, 48, 86, .94), rgba(20, 29, 56, .88));
+    box-shadow: var(--od-shadow-card);
+    overflow: hidden;
+  }
+
+  .brand-mark {
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    border-radius: 24px;
+    background: radial-gradient(circle at 35% 25%, #ffe6a3, var(--od-color-accent) 58%, #9b6b1d);
+    color: var(--od-color-accent-ink);
+    font-size: 2.5rem;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.65), var(--od-shadow-soft);
+  }
+
+  .eyebrow {
+    margin: 0 0 7px;
+    color: var(--od-color-accent-strong);
+    font-size: .74rem;
+    font-weight: 800;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--od-font-display);
+    font-size: clamp(2.2rem, 6vw, 4.4rem);
+    line-height: .98;
+    font-weight: 600;
+    letter-spacing: -.04em;
+  }
+
+  .hero-copy {
+    max-width: 660px;
+    margin: 12px 0 0;
+    color: var(--od-color-text-muted);
+    font-size: clamp(.98rem, 2vw, 1.08rem);
+    line-height: 1.65;
+  }
+
+  .status-card {
+    min-width: 178px;
+    padding: var(--od-space-3);
+    border: 1px solid var(--od-color-border-soft);
+    border-radius: var(--od-radius-md);
+    background: rgba(255, 255, 255, .055);
+  }
+
+  .status-card strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--od-color-text);
+    font-size: .92rem;
+  }
+
+  .status-card span {
+    color: var(--od-color-text-muted);
+    font-size: .82rem;
+    line-height: 1.45;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 348px;
+    gap: var(--od-space-4);
+    align-items: start;
+  }
+
+  .chat-card,
+  .verse-card {
+    border: 1px solid var(--od-color-border-soft);
+    border-radius: var(--od-radius-lg);
+    background: var(--od-color-surface);
+    box-shadow: var(--od-shadow-card);
+    backdrop-filter: blur(16px);
+  }
+
+  .chat-card { overflow: hidden; }
+
+  .chat-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--od-space-3);
+    padding: var(--od-space-4);
+    border-bottom: 1px solid var(--od-color-border-soft);
+  }
+
+  .chat-head h2,
+  .verse-card h2 {
+    margin: 0;
+    font-family: var(--od-font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+  }
+
+  .chat-head p,
+  .verse-card .hint {
+    margin: 5px 0 0;
+    color: var(--od-color-text-muted);
+    font-size: .9rem;
+    line-height: 1.5;
+  }
+
+  .button {
+    border: 0;
+    border-radius: var(--od-radius-pill);
+    background: var(--od-color-accent);
+    color: var(--od-color-accent-ink);
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform .16s ease, background .16s ease, opacity .16s ease;
+  }
+
+  .button:hover:not(:disabled) {
+    background: var(--od-color-accent-strong);
+    transform: translateY(-1px);
+  }
+
+  .button:disabled { opacity: .55; cursor: wait; }
+
+  .button.secondary {
+    border: 1px solid var(--od-color-border-soft);
+    background: rgba(255, 255, 255, .06);
+    color: var(--od-color-text);
+  }
+
+  .button.small { padding: 8px 12px; font-size: .82rem; }
+
+  .suggestions {
+    display: flex;
+    gap: var(--od-space-2);
+    flex-wrap: wrap;
+    padding: var(--od-space-3) var(--od-space-4) 0;
+  }
+
+  .chip {
+    border: 1px solid rgba(232, 182, 76, .28);
+    border-radius: var(--od-radius-pill);
+    background: rgba(232, 182, 76, .08);
+    color: #ffe1a1;
+    padding: 8px 12px;
+    font: inherit;
+    font-size: .86rem;
+    cursor: pointer;
+  }
+
+  .chip:hover { background: rgba(232, 182, 76, .16); }
+
+  #log {
+    display: flex;
+    flex-direction: column;
+    gap: var(--od-space-3);
+    min-height: 360px;
+    padding: var(--od-space-4);
+  }
+
+  .empty-state {
+    margin: auto;
+    max-width: 500px;
+    padding: var(--od-space-5) var(--od-space-4);
+    text-align: center;
+    color: var(--od-color-text-muted);
+  }
+
+  .empty-state .lotus { font-size: 2.8rem; margin-bottom: var(--od-space-2); }
+  .empty-state h3 { margin: 0 0 8px; color: var(--od-color-text); font-family: var(--od-font-display); font-size: 1.55rem; }
+  .empty-state p { margin: 0; line-height: 1.65; }
+
+  .msg {
+    max-width: 88%;
+    padding: 16px 18px;
+    border-radius: 20px;
+    line-height: 1.68;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    box-shadow: var(--od-shadow-soft);
+  }
+
+  .msg.you {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #3b61a5, var(--od-color-surface-user));
+    border-bottom-right-radius: 8px;
+  }
+
+  .msg.krsna {
+    align-self: flex-start;
+    border: 1px solid rgba(232, 182, 76, .20);
+    background: linear-gradient(145deg, rgba(48, 63, 108, .96), rgba(29, 39, 70, .96));
+    border-bottom-left-radius: 8px;
+  }
+
+  .msg.error {
+    border-color: rgba(239, 125, 125, .45);
+    background: rgba(90, 31, 42, .72);
+  }
+
+  .message-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    color: #ffe1a1;
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+
+  .message-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--od-color-border-soft);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--od-radius-pill);
+    padding: 5px 9px;
+    background: rgba(99, 201, 138, .16);
+    color: #a9e8bf;
+    font-size: .76rem;
+    font-weight: 800;
+  }
+
+  .badge.warn { background: rgba(228, 154, 82, .18); color: #ffc99b; }
+
+  .ref-button {
+    border: 1px solid rgba(232, 182, 76, .34);
+    border-radius: var(--od-radius-pill);
+    background: rgba(232, 182, 76, .09);
+    color: #ffe1a1;
+    padding: 7px 10px;
+    font: inherit;
+    font-size: .8rem;
+    cursor: pointer;
+  }
+
+  .ref-button:hover,
+  .ref-button.active { background: rgba(232, 182, 76, .22); }
+
+  .typing {
+    display: inline-flex;
+    gap: 5px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .typing i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--od-color-accent);
+    animation: pulse 1s infinite ease-in-out;
+  }
+
+  .typing i:nth-child(2) { animation-delay: .14s; }
+  .typing i:nth-child(3) { animation-delay: .28s; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: .25; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-3px); }
+  }
+
+  .composer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--od-space-2);
+    padding: var(--od-space-3);
+    border-top: 1px solid var(--od-color-border-soft);
+    background: rgba(9, 13, 29, .38);
+  }
+
+  #question {
+    width: 100%;
+    min-height: 52px;
+    max-height: 150px;
+    resize: vertical;
+    border: 1px solid var(--od-color-border-soft);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .065);
+    color: var(--od-color-text);
+    padding: 14px 15px;
+    font: inherit;
+    line-height: 1.45;
+    outline: none;
+  }
+
+  #question:focus {
+    border-color: rgba(232, 182, 76, .65);
+    box-shadow: 0 0 0 4px rgba(232, 182, 76, .12);
+  }
+
+  #question::placeholder { color: #93a0ba; }
+  .composer .button { padding: 0 22px; min-height: 52px; }
+
+  .composer-note {
+    grid-column: 1 / -1;
+    color: var(--od-color-text-muted);
+    font-size: .78rem;
+    line-height: 1.45;
+  }
+
+  .verse-card {
+    position: sticky;
+    top: 22px;
+    padding: var(--od-space-4);
+  }
+
+  .verse-kicker {
+    color: var(--od-color-accent-strong);
+    font-size: .74rem;
+    font-weight: 900;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+  }
+
+  .verse-ref {
+    margin: 8px 0 6px;
+    font-family: var(--od-font-display);
+    font-size: 1.55rem;
+    line-height: 1.2;
+  }
+
+  .verse-meta { color: var(--od-color-text-muted); font-size: .88rem; line-height: 1.55; }
+
+  .verse-translation {
+    margin: var(--od-space-4) 0;
+    padding: var(--od-space-3);
+    border-left: 3px solid var(--od-color-accent);
+    border-radius: 0 var(--od-radius-sm) var(--od-radius-sm) 0;
+    background: rgba(232, 182, 76, .08);
+    font-family: var(--od-font-display);
+    font-size: 1.06rem;
+    line-height: 1.68;
+  }
+
+  .verse-card details {
+    border-top: 1px solid var(--od-color-border-soft);
+    padding-top: var(--od-space-3);
+    color: var(--od-color-text-muted);
+    font-size: .9rem;
+    line-height: 1.6;
+  }
+
+  .verse-card summary { color: var(--od-color-text); cursor: pointer; font-weight: 800; }
+  .verse-card details p { white-space: pre-wrap; }
+
+  .source-note {
+    margin-top: var(--od-space-3);
+    padding: var(--od-space-3);
+    border-radius: var(--od-radius-sm);
+    background: rgba(99, 201, 138, .09);
+    color: #b9ecca;
+    font-size: .84rem;
+    line-height: 1.55;
+  }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: auto 1fr; }
+    .status-card { grid-column: 1 / -1; }
+    .layout { grid-template-columns: 1fr; }
+    .verse-card { position: static; }
+  }
+
+  @media (max-width: 620px) {
+    .app-shell { width: min(100% - 20px, var(--od-max-width)); padding-top: 10px; }
+    .hero { grid-template-columns: 1fr; padding: 22px; }
+    .brand-mark { width: 58px; height: 58px; border-radius: 18px; font-size: 1.9rem; }
+    .chat-head { align-items: flex-start; flex-direction: column; }
+    .msg { max-width: 96%; }
+    .composer { grid-template-columns: 1fr; }
+    .composer .button { width: 100%; }
+  }
+</style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero" aria-labelledby="page-title">
+      <div class="brand-mark" aria-hidden="true">🦚</div>
+      <div>
+        <p class="eyebrow">Bhagavad Gita · Uddhava-gītā</p>
+        <h1 id="page-title">Ask Krishna</h1>
+        <p class="hero-copy">
+          Bring a problem of life — anxiety, anger, grief, failure, family conflict, or purpose.
+          Krishna answers in a warm teacher-friend voice, using only teachings retrieved from your two books.
+        </p>
+      </div>
+      <aside class="status-card" aria-label="Assistant status">
+        <strong id="corpus-status">Loading books…</strong>
+        <span>Every quoted verse is checked against the stored book text before it reaches you.</span>
+      </aside>
+    </header>
+
+    <main class="layout">
+      <section class="chat-card" aria-label="Chat with Krishna">
+        <div class="chat-head">
+          <div>
+            <h2>Conversation</h2>
+            <p>Ask one sincere question. Follow-ups remember this chat until you start a new one.</p>
+          </div>
+          <button id="new-chat" class="button secondary small" type="button">↺ New chat</button>
+        </div>
+
+        <div class="suggestions" aria-label="Suggested questions">
+          <button class="chip" type="button" data-question="I am anxious about my future and cannot sleep">😟 Anxiety</button>
+          <button class="chip" type="button" data-question="I get angry very quickly and say things I regret. How do I control my temper?">🔥 Anger</button>
+          <button class="chip" type="button" data-question="I am grieving the loss of someone I love. How do I find peace?">🕯️ Grief</button>
+          <button class="chip" type="button" data-question="I worked hard but failed. I feel like giving up.">🌧️ Failure</button>
+          <button class="chip" type="button" data-question="What is the purpose of my life? I feel directionless.">🧭 Purpose</button>
+          <button class="chip" type="button" data-question="I keep fighting with my family. How should I respond?">🏠 Family conflict</button>
+        </div>
+
+        <div id="log" aria-live="polite">
+          <div id="empty-state" class="empty-state">
+            <div class="lotus">🪷</div>
+            <h3>Krishna is listening</h3>
+            <p>Ask about a real problem in simple words. You will receive a teaching, exact verse quotations, and a small step you can practise today.</p>
+          </div>
+        </div>
+
+        <form id="composer" class="composer">
+          <textarea id="question" rows="2" maxlength="4000" placeholder="Ask Krishna… e.g. I feel stressed and lost. What should I do?" aria-label="Ask Krishna"></textarea>
+          <button id="send" class="button" type="submit">Ask</button>
+          <div class="composer-note">
+            Krishna's voice, guided by the Bhagavad Gita and Uddhava-gītā — an AI assistant. It does not replace human or professional help in a crisis.
+          </div>
+        </form>
+      </section>
+
+      <aside class="verse-card" aria-label="Selected verse">
+        <div class="verse-kicker">Verified reference</div>
+        <h2 id="verse-title">Open a verse</h2>
+        <p id="verse-empty" class="hint">
+          After Krishna answers, click any gold reference button to inspect the exact verse here — book, chapter, translation, and PDF page.
+        </p>
+
+        <div id="verse-content" class="hidden">
+          <div id="verse-ref" class="verse-ref"></div>
+          <div id="verse-meta" class="verse-meta"></div>
+          <blockquote id="verse-translation" class="verse-translation"></blockquote>
+          <details id="verse-purport-wrap">
+            <summary>Read purport excerpt</summary>
+            <p id="verse-purport"></p>
+          </details>
+          <div class="source-note" id="verse-source"></div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+<script>
+  const logEl = document.getElementById('log');
+  const emptyState = document.getElementById('empty-state');
+  const form = document.getElementById('composer');
+  const input = document.getElementById('question');
+  const sendBtn = document.getElementById('send');
+  const newChatBtn = document.getElementById('new-chat');
+  const corpusStatus = document.getElementById('corpus-status');
+
+  const verseTitle = document.getElementById('verse-title');
+  const verseEmpty = document.getElementById('verse-empty');
+  const verseContent = document.getElementById('verse-content');
+  const verseRef = document.getElementById('verse-ref');
+  const verseMeta = document.getElementById('verse-meta');
+  const verseTranslation = document.getElementById('verse-translation');
+  const versePurportWrap = document.getElementById('verse-purport-wrap');
+  const versePurport = document.getElementById('verse-purport');
+  const verseSource = document.getElementById('verse-source');
+
+  let history = [];
+  let lastQuestion = '';
+  let busy = false;
+
+  function scrollToBottom() {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }
+
+  function hideEmptyState() {
+    if (emptyState) emptyState.classList.add('hidden');
+  }
+
+  function addMessage(kind, text) {
+    hideEmptyState();
+    const el = document.createElement('div');
+    el.className = 'msg ' + kind;
+    if (kind === 'krsna') {
+      const meta = document.createElement('div');
+      meta.className = 'message-meta';
+      meta.textContent = '🦚 Krishna';
+      el.appendChild(meta);
+    }
+    const body = document.createElement('div');
+    body.textContent = text;
+    el.appendChild(body);
+    logEl.appendChild(el);
+    scrollToBottom();
+    return { el, body };
+  }
+
+  function addAssistantActions(container, answerText, data) {
+    const actions = document.createElement('div');
+    actions.className = 'message-actions';
+
+    const copyBtn = document.createElement('button');
+    copyBtn.type = 'button';
+    copyBtn.className = 'button secondary small';
+    copyBtn.textContent = '📋 Copy';
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(answerText);
+        copyBtn.textContent = '✓ Copied';
+        setTimeout(() => { copyBtn.textContent = '📋 Copy'; }, 1400);
+      } catch (_) {
+        copyBtn.textContent = 'Copy failed';
+      }
+    });
+    actions.appendChild(copyBtn);
+
+    const badge = document.createElement('span');
+    badge.className = 'badge' + (data.citations_ok ? '' : ' warn');
+    badge.textContent = data.citations_ok ? '✓ citations verified' : '⚠ citations adjusted';
+    actions.appendChild(badge);
+
+    if (data.retry_error) {
+      const degraded = document.createElement('span');
+      degraded.className = 'badge warn';
+      degraded.textContent = '⚠ rewrite failed · answer kept as drafted';
+      degraded.title = data.retry_error;
+      actions.appendChild(degraded);
+    }
+
+    (data.references || []).forEach(ref => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ref-button';
+      btn.textContent = ref.ref;
+      btn.title = `${ref.book} · PDF page ${ref.pdf_page}`;
+      btn.addEventListener('click', () => openVerse(ref.id, btn));
+      actions.appendChild(btn);
+    });
+
+    container.appendChild(actions);
+  }
+
+  async function openVerse(id, button) {
+    document.querySelectorAll('.ref-button.active').forEach(btn => btn.classList.remove('active'));
+    if (button) button.classList.add('active');
+
+    verseTitle.textContent = 'Loading verse…';
+    verseEmpty.classList.add('hidden');
+    verseContent.classList.add('hidden');
+
+    try {
+      const res = await fetch('/verse/' + encodeURIComponent(id));
+      if (!res.ok) throw new Error('Verse request failed');
+      const verse = await res.json();
+
+      verseTitle.textContent = 'Verse from the book';
+      verseRef.textContent = verse.ref;
+      verseMeta.textContent = `${verse.book}${verse.chapter_title ? ' · ' + verse.chapter_title : ''}`;
+      verseTranslation.textContent = '“' + verse.translation + '”';
+      versePurport.textContent = verse.purport || 'No purport excerpt is stored for this verse.';
+      versePurportWrap.classList.toggle('hidden', !verse.purport);
+      verseSource.textContent = `Source: ${verse.book}, PDF page ${verse.pdf_page}. This is the exact stored translation used by the citation checker.`;
+      verseContent.classList.remove('hidden');
+      document.querySelector('.verse-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch (_) {
+      verseTitle.textContent = 'Verse unavailable';
+      verseEmpty.textContent = 'That reference could not be loaded. Please try again.';
+      verseEmpty.classList.remove('hidden');
+    }
+  }
+
+  function setBusy(nextBusy) {
+    busy = nextBusy;
+    sendBtn.disabled = nextBusy;
+    input.disabled = nextBusy;
+    sendBtn.textContent = nextBusy ? 'Listening…' : 'Ask';
+  }
+
+  async function askQuestion(question) {
+    const text = (question || '').trim();
+    if (!text || busy) return;
+
+    lastQuestion = text;
+    addMessage('you', text);
+    history.push({ role: 'user', content: text });
+
+    const waiting = addMessage('krsna', 'Krishna is listening');
+    const dots = document.createElement('span');
+    dots.className = 'typing';
+    dots.innerHTML = '<i></i><i></i><i></i>';
+    waiting.body.appendChild(dots);
+
+    setBusy(true);
+
+    try {
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: text, history: history.slice(-8) })
+      });
+      if (!res.ok) {
+        let detail = 'Chat request failed: ' + res.status;
+        try { const err = await res.json(); if (err && err.detail) detail = err.detail; } catch (_) {}
+        throw new Error(detail);
+      }
+
+      const data = await res.json();
+      waiting.body.textContent = data.answer || 'Krishna returned an empty answer. Please try again.';
+      history.push({ role: 'assistant', content: waiting.body.textContent });
+      addAssistantActions(waiting.el, waiting.body.textContent, data);
+    } catch (error) {
+      waiting.el.classList.add('error');
+      waiting.body.textContent = error.message
+        || 'Something failed while asking Krishna. Please check the connection and try again.';
+
+      const retry = document.createElement('button');
+      retry.type = 'button';
+      retry.className = 'button secondary small';
+      retry.textContent = '↻ Retry last question';
+      retry.addEventListener('click', () => {
+        waiting.el.remove();
+        history = history.filter(item => item.content !== text || item.role !== 'user');
+        askQuestion(lastQuestion);
+      });
+
+      const actions = document.createElement('div');
+      actions.className = 'message-actions';
+      actions.appendChild(retry);
+      waiting.el.appendChild(actions);
+    } finally {
+      setBusy(false);
+      input.focus();
+      scrollToBottom();
+    }
+  }
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const text = input.value;
+    input.value = '';
+    askQuestion(text);
+  });
+
+  input.addEventListener('keydown', event => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      form.requestSubmit();
+    }
+  });
+
+  document.querySelectorAll('[data-question]').forEach(chip => {
+    chip.addEventListener('click', () => askQuestion(chip.dataset.question));
+  });
+
+  newChatBtn.addEventListener('click', () => {
+    history = [];
+    lastQuestion = '';
+    logEl.innerHTML = '';
+    logEl.appendChild(emptyState);
+    emptyState.classList.remove('hidden');
+    verseTitle.textContent = 'Open a verse';
+    verseEmpty.textContent = 'After Krishna answers, click any gold reference button to inspect the exact verse here — book, chapter, translation, and PDF page.';
+    verseEmpty.classList.remove('hidden');
+    verseContent.classList.add('hidden');
+    input.value = '';
+    input.focus();
+  });
+
+  async function loadHealth() {
+    try {
+      const res = await fetch('/health');
+      if (!res.ok) throw new Error('Health failed');
+      const data = await res.json();
+      corpusStatus.textContent = `${Number(data.verses).toLocaleString()} verses ready`;
+    } catch (_) {
+      corpusStatus.textContent = 'Books unavailable';
+    }
+  }
+
+  loadHealth();
+  input.focus();
+  input.disabled = true;
+</script>
+</body>
+</html>
