@@ -1,0 +1,11 @@
+# Krishna AI assistant — runtime dependencies (all verified installed, 2026-10-27)
+pymupdf==1.28.2        # PDF text extraction (ingestion only)
+pydantic>=2            # verse record schema
+numpy==2.2.4           # embedding matrix + cosine search
+httpx==0.28.1          # LiteLLM gateway client (LLM + embeddings)
+fastapi==0.141.1       # web API
+uvicorn==0.46.0        # ASGI server
+pytest>=8              # test suite (dev)
+python-dotenv>=1       # load local .env secrets (optional but recommended)
+# Optional local fallback (not required when the gateway is reachable):
+# sentence-transformers==6.0.0
