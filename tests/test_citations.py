@@ -88,3 +88,45 @@ def test_short_spans_are_paraphrase_not_quotes() -> None:
     long = f'"{span}" (Bhagavad-gita 6.5)\n\nReferences: [BG-6.5]'
     rep2 = citations.check(long, store(), retrieved=["BG-6.5"])
     assert rep2["ok"] and rep2["quotes"][0]["verse_id"] == "BG-6.5"
+
+
+def test_ashtavakra_quote_passes() -> None:
+    """The third book is verifiable on the same terms as the other two."""
+    rec = store().get("AG-1.2")
+    ans = f'Ashtavakra says: "{rec["translation"]}" (Ashtavakra Gita 1.2)\n\nReferences: [AG-1.2]'
+    rep = citations.check(ans, store(), retrieved=["AG-1.2"])
+    assert rep["ok"] and rep["unknown_ids"] == [] and rep["bad_quotes"] == []
+    assert rep["quotes"][0]["verse_id"] == "AG-1.2"
+
+
+def test_ashtavakra_prose_ref_resolves_to_the_store_id() -> None:
+    """The human-readable form must map back to the store id, not be dropped as unknown."""
+    rec = store().get("AG-18.6")
+    ans = (f'Ashtavakra taught: "{rec["translation"]}" (Ashtavakra Gita 18.6)\n\n'
+           "References: [AG-18.6]")
+    rep = citations.check(ans, store(), retrieved=["AG-18.6"])
+    assert rep["ok"] and "AG-18.6" in rep["cited"]
+    assert citations.parse_cited_ids("(Ashtavakra Gita 18.6)") == ["AG-18.6"]
+
+
+def test_enforce_keeps_ag_reference_and_strips_invented_one() -> None:
+    ans = ("Ashtavakra says the mind is the knot. (Ashtavakra Gita 1.2)\n\n"
+           "References: [AG-1.2, AG-99.99]")
+    rep = citations.check(ans, store(), retrieved=["AG-1.2"])
+    assert not rep["ok"] and rep["unknown_ids"] == ["AG-99.99"]
+    result = citations.enforce(ans, rep, store())
+    assert "AG-1.2" in result["answer"] and "AG-99.99" not in result["answer"]
+    assert result["removed"]["unknown_ids"] == ["AG-99.99"]
+
+
+def test_mixed_books_are_both_verifiable() -> None:
+    """A corroborating Ashtavakra quote must not be stripped when both quotes are verbatim."""
+    ag = store().get("AG-1.2")
+    bg = store().get("BG-2.47")
+    ans = (f'Ashtavakra says: "{ag["translation"]}" (Ashtavakra Gita 1.2), and I told Arjuna: '
+           f'"{bg["translation"]}" (Bhagavad-gita 2.47)\n\nReferences: [AG-1.2, BG-2.47]')
+    rep = citations.check(ans, store(), retrieved=["AG-1.2", "BG-2.47"])
+    assert rep["ok"] and rep["bad_quotes"] == [] and rep["off_scope"] == []
+    assert sorted(rep["cited"]) == ["AG-1.2", "BG-2.47"]
+    result = citations.enforce(ans, rep, store())
+    assert "AG-1.2" in result["answer"] and "BG-2.47" in result["answer"]
