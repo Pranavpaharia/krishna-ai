@@ -225,6 +225,24 @@
 
   .button.small { padding: 8px 12px; font-size: .82rem; }
 
+  .chat-head-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--od-space-2);
+  }
+
+  .voice-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--od-space-2);
+    border: 1px solid var(--od-color-border-soft);
+    border-radius: var(--od-radius-pill);
+    background: rgba(255, 255, 255, .06);
+    color: var(--od-color-text-muted);
+    font-size: .82rem;
+    padding: 8px 12px;
+  }
+
   .suggestions {
     display: flex;
     gap: var(--od-space-2);
@@ -485,11 +503,13 @@
     <header class="hero" aria-labelledby="page-title">
       <div class="brand-mark" aria-hidden="true">🦚</div>
       <div>
-        <p class="eyebrow">Bhagavad Gita · Uddhava-gītā</p>
+        <p class="eyebrow">Bhagavad Gita · Uddhava-gītā · Ashtavakra Gita</p>
         <h1 id="page-title">Ask Krishna</h1>
         <p class="hero-copy">
           Bring a problem of life — anxiety, anger, grief, failure, family conflict, or purpose.
-          Krishna answers in a warm teacher-friend voice, using only teachings retrieved from your two books.
+          Krishna answers in a warm teacher-friend voice, using only teachings retrieved from your three books —
+          the Bhagavad Gita, the Uddhava-gītā, and the Ashtavakra Gita. One voice speaks; every quote is checked
+          against the stored text before it reaches you.
         </p>
       </div>
       <aside class="status-card" aria-label="Assistant status">
@@ -505,7 +525,10 @@
             <h2>Conversation</h2>
             <p>Ask one sincere question. Follow-ups remember this chat until you start a new one.</p>
           </div>
-          <button id="new-chat" class="button secondary small" type="button">↺ New chat</button>
+          <div class="chat-head-actions">
+            <span class="voice-badge">🪷 Krishna — one voice, three books</span>
+            <button id="new-chat" class="button secondary small" type="button">↺ New chat</button>
+          </div>
         </div>
 
         <div class="suggestions" aria-label="Suggested questions">
@@ -564,6 +587,10 @@
   const newChatBtn = document.getElementById('new-chat');
   const corpusStatus = document.getElementById('corpus-status');
 
+  // One persona speaks. The voice id and its display label are constants, not a choice.
+  const VOICE = 'krishna';
+  const SPEAKER_LABEL = '🪷 Krishna';
+
   const verseTitle = document.getElementById('verse-title');
   const verseEmpty = document.getElementById('verse-empty');
   const verseContent = document.getElementById('verse-content');
@@ -586,14 +613,14 @@
     if (emptyState) emptyState.classList.add('hidden');
   }
 
-  function addMessage(kind, text) {
+  function addMessage(kind, text, speaker) {
     hideEmptyState();
     const el = document.createElement('div');
     el.className = 'msg ' + kind;
     if (kind === 'krsna') {
       const meta = document.createElement('div');
       meta.className = 'message-meta';
-      meta.textContent = '🦚 Krishna';
+      meta.textContent = speaker || SPEAKER_LABEL;
       el.appendChild(meta);
     }
     const body = document.createElement('div');
@@ -693,7 +720,7 @@
     addMessage('you', text);
     history.push({ role: 'user', content: text });
 
-    const waiting = addMessage('krsna', 'Krishna is listening');
+    const waiting = addMessage('krsna', SPEAKER_LABEL + ' is listening', SPEAKER_LABEL);
     const dots = document.createElement('span');
     dots.className = 'typing';
     dots.innerHTML = '<i></i><i></i><i></i>';
@@ -705,7 +732,7 @@
       const res = await fetch('/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: text, history: history.slice(-8) })
+        body: JSON.stringify({ question: text, history: history.slice(-8), voice: VOICE })
       });
       if (!res.ok) {
         let detail = 'Chat request failed: ' + res.status;
@@ -714,7 +741,9 @@
       }
 
       const data = await res.json();
-      waiting.body.textContent = data.answer || 'Krishna returned an empty answer. Please try again.';
+      const spoken = SPEAKER_LABEL;
+      waiting.el.querySelector('.message-meta').textContent = spoken;
+      waiting.body.textContent = data.answer || spoken + ' returned an empty answer. Please try again.';
       history.push({ role: 'assistant', content: waiting.body.textContent });
       addAssistantActions(waiting.el, waiting.body.textContent, data);
     } catch (error) {
@@ -783,12 +812,15 @@
       corpusStatus.textContent = `${Number(data.verses).toLocaleString()} verses ready`;
     } catch (_) {
       corpusStatus.textContent = 'Books unavailable';
+    } finally {
+      // The backend has answered (or failed) — the composer is usable either way.
+      setBusy(false);
     }
   }
 
-  loadHealth();
-  input.focus();
-  input.disabled = true;
+  // Start disabled so nothing can be submitted before /health resolves.
+  setBusy(true);
+  loadHealth().then(() => input.focus());
 </script>
 </body>
 </html>
