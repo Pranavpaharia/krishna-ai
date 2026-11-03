@@ -21,7 +21,8 @@ Other files in the workspace: [README.md](README.md) (Meta model/gateway info), 
 
 **Bottom line (updated):** Two books can be read by a computer today — the Uddhava-gītā and, since the addendum,
 *Bhagavad-gītā As It Is* (1972). The Star Publications scan would still need OCR and is now optional. This removes
-the project's biggest technical risk; see the ADDENDUM next.
+the project's biggest technical risk; see the ADDENDUM next. *Ashtavakra Gita* (John Richards 1996) was added later
+as the third source and extracts cleanly with no OCR — 298 records, translation only.
 
 ---
 
