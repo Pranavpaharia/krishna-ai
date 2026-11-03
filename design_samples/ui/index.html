@@ -130,6 +130,8 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; }
+    img, picture, video { max-width: 100%; height: auto; display: block; }
+
     body {
       margin: 0;
       background: var(--od-color-bg);
@@ -328,6 +330,17 @@
     @media (max-width: 900px) {
       .layout { grid-template-columns: 1fr; }
     }
+
+    @media (max-width: 600px) {
+      .page { padding: 24px 0; }
+      .hero { flex-direction: column; gap: 12px; }
+      .composer input { min-height: 48px; padding: 12px; }
+      .toggle button { min-height: 44px; padding: 0 12px; }
+      .badge { min-height: 44px; padding: 0 8px; }
+      .ref-button { min-height: 44px; padding: 0 10px; }
+      .verse-card { padding: 16px; }
+      .msg { padding: 12px; }
+    }
   </style>
 </head>
 <body>
@@ -360,7 +373,7 @@
           <path d="M12 12.2c1.6-1.4 3.2-2.2 4.8-2.4M12 12.2c-1.6-1.4-3.2-2.2-4.8-2.4"></path>
         </svg>
         <div>
-          <p class="eyebrow">Grounded on two books</p>
+          <p class="eyebrow">Grounded on three books</p>
           <h2>Ask, and be still</h2>
         </div>
       </div>
