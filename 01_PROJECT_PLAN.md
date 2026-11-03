@@ -49,7 +49,7 @@ The assistant must:
 ```
 
 **Why this design (RAG — Retrieval-Augmented Generation):** the model never answers from its own memory of
-scripture; it answers only from verses retrieved out of *your two books*, which are pasted into the prompt.
+scripture; it answers only from verses retrieved out of *your three books*, which are pasted into the prompt.
 That is what makes the references correct and checkable, and it keeps answers faithful to these editions.
 
 ---
@@ -265,4 +265,4 @@ Defaults I will follow **unless you say otherwise** when approving:
 
 **Please approve, approve with changes, or reject this plan.** On approval I execute §6 in order,
 ticking the checkboxes as I go, and stop again if I hit a genuine ambiguity — per your rules,
-no guessing, no invented scripture, and nothing beyond these two books presented as Krishna's word.
+no guessing, no invented scripture, and nothing beyond these three books presented as Krishna's word.
