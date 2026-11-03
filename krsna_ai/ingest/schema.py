@@ -12,8 +12,8 @@ from pydantic import BaseModel, Field
 class Verse(BaseModel):
     """One verse (or chapter-level summary) from one of the source books."""
 
-    id: str = Field(description="Stable unique id, e.g. 'BG-2.47' or 'SB-11.8.15'")
-    book: str = Field(description="'Bhagavad Gita' or 'Uddhava-gita'")
+    id: str = Field(description="Stable unique id, e.g. 'BG-2.47', 'SB-11.8.15' or 'AG-1.2'")
+    book: str = Field(description="'Bhagavad Gita', 'Uddhava-gita' or 'Ashtavakra Gita'")
     chapter: int = Field(description="Chapter number within the book's own numbering")
     verse: int | None = Field(
         default=None, description="Verse number within the chapter; None for summaries"
