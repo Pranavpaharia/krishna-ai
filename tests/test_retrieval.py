@@ -32,3 +32,10 @@ def test_grief_surfaces_bg_220() -> None:
 def test_every_hit_is_a_real_record() -> None:
     hits = retriever.retrieve(store(), "What is the purpose of my life?")
     assert hits and all(store().get(h["id"]) is not None for h in hits)
+
+
+def test_ashtavakra_surfaces_on_its_own_theme() -> None:
+    """The third book must reach the prompt, not just exist in the store."""
+    hits = retriever.retrieve(store(), "How is one to attain liberation and dispassion?")
+    ids = [h["id"] for h in hits]
+    assert "AG-1.1" in ids and "AG-18.71" in ids
