@@ -9,9 +9,10 @@ from pathlib import Path
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
-from krsna_ai.core import audit
+from krsna_ai import config
+from krsna_ai.core import audit, persona
 from krsna_ai.core.engine import answer_question
 from krsna_ai.core.llm import GatewayError
 from krsna_ai.core.store import Store
@@ -37,19 +38,37 @@ class HistoryItem(BaseModel):
 class ChatRequest(BaseModel):
     question: str = Field(min_length=1, max_length=4000)
     history: list[HistoryItem] = Field(default_factory=list, max_length=12)
+    voice: str = Field(
+        default=config.VOICE,
+        description="The single persona that answers. Only 'krishna' is valid.",
+    )
+
+    @field_validator("voice")
+    @classmethod
+    def _known_voice(cls, value: str) -> str:
+        value = value.strip().lower()
+        if value not in persona.VOICES:
+            raise ValueError(f"unknown voice; expected one of {sorted(persona.VOICES)}")
+        return value
 
 
 @app.get("/health")
 async def health() -> dict:
     store = get_store()
-    return {"status": "ok", "verses": len(store.records)}
+    return {
+        "status": "ok",
+        "verses": len(store.records),
+        "voice": persona.VOICE,
+        "voice_label": persona.VOICE_LABEL,
+        "books": sorted({rec["book"] for rec in store.records}),
+    }
 
 
 @app.post("/chat")
 async def chat(req: ChatRequest) -> dict:
     history = [item.model_dump() for item in req.history]
     try:
-        return await answer_question(get_store(), req.question, history=history)
+        return await answer_question(get_store(), req.question, history=history, voice=req.voice)
     except GatewayError as exc:
         # answer_question audits only after a successful call, so a gateway failure would
         # otherwise leave no trace in the log — which is why this one was hard to see.
@@ -86,4 +105,9 @@ async def index() -> FileResponse:
 if __name__ == "__main__":
     import os
 
-    uvicorn.run(app, host="127.0.0.1", port=int(os.environ.get("KRSNA_PORT", "8123")))
+    # 0.0.0.0 so the service is reachable from other tailnet nodes (phone, laptop).
+    uvicorn.run(
+        app,
+        host=os.environ.get("KRSNA_HOST", "0.0.0.0"),
+        port=int(os.environ.get("KRSNA_PORT", "8123")),
+    )
