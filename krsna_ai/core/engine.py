@@ -37,21 +37,29 @@ async def answer_question(
     question: str,
     history: list[dict] | None = None,
     top_k: int = config.TOP_K,
+    voice: str = config.VOICE,
 ) -> dict:
     """Answer one user turn with verified, grounded references.
 
     ``history`` may contain prior ``{role, content}`` turns from the UI. It helps the model
     understand short follow-ups, but retrieval and citation checking always run against the
     current question and the passages actually retrieved.
+
+    ``voice`` names the single persona. It is validated here so no caller can silently
+    reintroduce a second voice; the grounding contract is unchanged, so every quote is
+    still verified verbatim against the store.
     """
     started = time.perf_counter()
+    voice = str(voice).strip().lower()
+    if voice not in persona.VOICES:
+        raise ValueError(f"unknown voice {voice!r}; expected one of {sorted(persona.VOICES)}")
     # First question of a conversation -> fast model + short MODE-1 answer;
     # any prior turns -> flagship model + full MODE-2 depth.
     is_first = bool(config.FAST_FIRST_TURN) and not history
     passages = await retriever.retrieve_async(store, question, top_k)
     retrieved_ids = [p["id"] for p in passages]
     context = retriever.format_context(passages)
-    messages = persona.build_messages(question, context, history=history)
+    messages = persona.build_messages(question, context, history=history, voice=voice)
 
     answer = await llm.chat(messages, fast=is_first)
     report = citations.check(answer, store, retrieved=retrieved_ids)
@@ -93,6 +101,7 @@ async def answer_question(
     latency_ms = round((time.perf_counter() - started) * 1000)
     audit.record({
         "question": question,
+        "voice": voice,
         "mode": passages[0].get("mode") if passages else None,
         "fast": is_first,
         "retrieved": retrieved_ids,
@@ -107,6 +116,7 @@ async def answer_question(
 
     return {
         "answer": answer,
+        "voice": voice,
         "references": refs,
         "citations_ok": bool(report["ok"]),
         "retried": retried,
