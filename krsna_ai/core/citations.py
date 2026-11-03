@@ -16,10 +16,14 @@ import re
 
 from krsna_ai.core import store as store_mod
 
-_ID_RE = re.compile(r"\[(BG-\d+\.\d+|SB-11\.\d+\.\d+)\]")
-_ID_TOKEN = re.compile(r"\b(BG-\d+\.\d+|SB-11\.\d+\.\d+)\b")
-_BG_REF = re.compile(r"\(Bhagavad-gita\s+(\d+)\.(\d+)")
-_SB_REF = re.compile(r"\(Uddhava-gita,\s*SB\s+11\.(\d+)\.(\d+)")
+# Book-agnostic: any "<PREFIX>-n.n(.n)" id resolves through the store, so a third book needs no
+# new pattern here. The prose form is the human-readable spelling the model writes in running
+# text; each label maps back to the same id prefix.
+_ID_RE = re.compile(r"\[([A-Z]{2,4}-\d+(?:\.\d+)+)\]")
+_ID_TOKEN = re.compile(r"\b([A-Z]{2,4}-\d+(?:\.\d+)+)\b")
+_PROSE_REF = re.compile(r"\((Bhagavad-gita|Uddhava-gita, SB|Ashtavakra Gita)\s+(\d+(?:\.\d+)+)\)")
+_PROSE_LABEL = {"BG": "Bhagavad-gita", "SB": "Uddhava-gita, SB", "AG": "Ashtavakra Gita"}
+_PROSE_PREFIX = {label: prefix for prefix, label in _PROSE_LABEL.items()}
 # Quotes of 12+ chars are checked; shorter spans are paraphrase, not scripture, and are
 # reported separately so the engine can ask for a real quote.
 _QUOTE_RE = re.compile(r"[\"“]([^\"”]{12,})[\"”]")
@@ -28,10 +32,8 @@ _REFS_LINE = re.compile(r"(?mi)^References:\s*(.*)$")
 
 def parse_cited_ids(answer: str) -> list[str]:
     ids = set(_ID_RE.findall(answer))
-    for m in _BG_REF.finditer(answer):
-        ids.add(f"BG-{m.group(1)}.{m.group(2)}")
-    for m in _SB_REF.finditer(answer):
-        ids.add(f"SB-11.{m.group(1)}.{m.group(2)}")
+    for m in _PROSE_REF.finditer(answer):
+        ids.add(f"{_PROSE_PREFIX[m.group(1)]}-{m.group(2)}")
     for m in _ID_TOKEN.finditer(answer):
         ids.add(m.group(1))
     return sorted(ids)
@@ -116,8 +118,10 @@ def enforce(answer: str, report: dict, store: store_mod.Store) -> dict:
     # otherwise a fabricated id survives in the line it was supposed to certify.
     out = _REFS_LINE.sub("", out)
     for vid in report["unknown_ids"]:
-        out = out.replace(f"(Bhagavad-gita {vid.split('-', 1)[1]})", "")
-        out = out.replace(f"(Uddhava-gita, SB {vid[3:]})", "")
+        prefix, tail = vid.split("-", 1)
+        label = _PROSE_LABEL.get(prefix)
+        if label:
+            out = out.replace(f"({label} {tail})", "")
         out = out.replace(vid, "")          # a bare invented id in prose must not survive either
     for q in report["bad_quotes"] + [i["quote"] for i in report["off_scope"]]:
         out = out.replace(f'"{q}"', "").replace(f"“{q}”", "")
