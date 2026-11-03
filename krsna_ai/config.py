@@ -41,27 +41,37 @@ _load_dotenv()
 # moved off 192.168.1.219 (dead subnet; the LAN is 192.168.0.0/24) to 192.168.0.60
 # on 2026-10-29. Pin the lease on the router, or prefer the Tailscale address.
 GATEWAY_CANDIDATES = (
-    "http://192.168.0.60:4000/v1",     # LAN lease (Dell Edge)
+    "http://192.168.1.132:4000/v1",    # LAN lease, ARP-discovered 2026-10-30 (Dell Edge)
+    "http://192.168.0.60:4000/v1",     # previous LAN lease (stale)
     "http://100.125.143.43:4000/v1",   # Tailscale alias, same instance
 )
 
 
+def _reachable(base: str) -> bool:
+    netloc = urlparse(base).netloc
+    host, _, port = netloc.partition(":")
+    try:
+        with socket.create_connection((host, int(port or 4000)), timeout=2):
+            return True
+    except OSError:
+        return False
+
+
 def resolve_base_url() -> str:
-    """Configured gateway, else the first candidate that answers on :4000."""
+    """Configured gateway, else the first candidate that answers on :4000.
+
+    A pinned .env URL is preferred, but a stale DHCP lease must not stop the server: if the pinned
+    address does not answer, the candidate list is tried before falling back to it.
+    """
     env = os.environ.get("KRSNA_LLM_BASE_URL")
-    if env:
-        return env
     if os.environ.get("KRSNA_OFFLINE", "").lower() in ("1", "true", "yes"):
-        return GATEWAY_CANDIDATES[0]
+        return env or GATEWAY_CANDIDATES[0]
+    if env and _reachable(env):
+        return env
     for base in GATEWAY_CANDIDATES:
-        netloc = urlparse(base).netloc
-        host, _, port = netloc.partition(":")
-        try:
-            with socket.create_connection((host, int(port or 4000)), timeout=2):
-                return base
-        except OSError:
-            continue
-    return GATEWAY_CANDIDATES[0]
+        if _reachable(base):
+            return base
+    return env or GATEWAY_CANDIDATES[0]
 
 
 LLM_BASE_URL = resolve_base_url()
@@ -103,3 +113,8 @@ TOP_K = 6
 # Offline mode: skip the embedding service and score lexically only. Used by the eval suite
 # (deterministic, no network) and by the app when the gateway is unreachable.
 OFFLINE = os.environ.get("KRSNA_OFFLINE", "").lower() in ("1", "true", "yes")
+
+# --- Voice --------------------------------------------------------------------
+# One persona answers: Krishna, quoting all three books with attribution. The env var
+# is kept so a deployment can rename its own voice; persona.py rejects any other value.
+VOICE = os.environ.get("KRSNA_VOICE", "krishna").strip().lower()
