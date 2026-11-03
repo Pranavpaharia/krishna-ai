@@ -21,10 +21,10 @@
     ],
     "verses": [
       "BG-2.62",
+      "AG-15.5",
       "BG-2.63",
-      "BG-3.37",
-      "BG-16.21",
-      "BG-5.26"
+      "AG-17.7",
+      "BG-18.66"
     ]
   },
   {
@@ -51,11 +51,16 @@
       "shok"
     ],
     "verses": [
+      "AG-11.4",
+      "AG-18.6",
       "BG-2.20",
+      "AG-20.9",
       "BG-2.13",
       "BG-2.27",
+      "BG-8.6",
       "BG-2.11",
-      "BG-8.6"
+      "AG-2.20",
+      "AG-17.7"
     ]
   },
   {
@@ -80,10 +85,13 @@
     ],
     "verses": [
       "BG-6.5",
+      "BG-8.6",
+      "BG-2.20",
+      "BG-2.13",
+      "AG-11.4",
       "BG-6.6",
       "BG-2.47",
-      "BG-18.66",
-      "BG-4.10"
+      "AG-2.20"
     ]
   },
   {
@@ -106,11 +114,17 @@
       "asakti"
     ],
     "verses": [
-      "SB-11.8.37",
       "SB-11.8.44",
+      "AG-1.2",
+      "BG-2.48",
       "SB-11.8.30",
-      "BG-2.62",
-      "BG-2.64"
+      "BG-18.47",
+      "BG-2.47",
+      "SB-11.8.37",
+      "BG-6.5",
+      "BG-3.19",
+      "BG-6.17",
+      "AG-1.5"
     ]
   },
   {
@@ -131,8 +145,8 @@
     ],
     "verses": [
       "BG-2.47",
-      "BG-2.48",
       "BG-18.47",
+      "BG-2.48",
       "BG-3.19"
     ]
   },
@@ -155,9 +169,9 @@
     ],
     "verses": [
       "BG-2.7",
+      "SB-11.17.44",
       "BG-18.63",
-      "BG-18.58",
-      "BG-4.34"
+      "BG-1.43"
     ]
   },
   {
@@ -175,9 +189,13 @@
     ],
     "verses": [
       "BG-6.30",
+      "AG-1.11",
       "BG-9.29",
-      "BG-10.20",
-      "BG-7.18"
+      "BG-7.18",
+      "AG-2.2",
+      "AG-1.6",
+      "AG-11.7",
+      "BG-10.20"
     ]
   },
   {
@@ -199,6 +217,9 @@
     "verses": [
       "SB-11.23.2",
       "SB-11.23.42",
+      "BG-2.62",
+      "BG-2.63",
+      "BG-18.66",
       "BG-12.13",
       "BG-12.18",
       "BG-5.18"
@@ -239,7 +260,12 @@
     ],
     "verses": [
       "SB-11.17.44",
-      "BG-1.43"
+      "BG-2.13",
+      "BG-2.11",
+      "BG-18.63",
+      "BG-1.43",
+      "BG-2.7",
+      "BG-2.20"
     ]
   },
   {
@@ -261,8 +287,7 @@
     "verses": [
       "BG-6.26",
       "BG-6.35",
-      "BG-6.34",
-      "BG-6.5"
+      "BG-6.34"
     ]
   },
   {
@@ -283,9 +308,19 @@
     ],
     "verses": [
       "BG-3.37",
+      "AG-1.6",
+      "AG-1.2",
       "BG-3.39",
+      "SB-11.23.42",
       "BG-2.70",
-      "BG-3.41"
+      "BG-12.13",
+      "BG-12.18",
+      "BG-5.18",
+      "BG-3.41",
+      "SB-11.8.37",
+      "SB-11.8.44",
+      "SB-11.23.2",
+      "AG-4.5"
     ]
   },
   {
@@ -306,8 +341,10 @@
     ],
     "verses": [
       "BG-3.27",
+      "BG-18.17",
       "SB-11.23.30",
-      "BG-18.17"
+      "AG-17.16",
+      "AG-4.5"
     ]
   },
   {
@@ -342,8 +379,8 @@
     ],
     "verses": [
       "BG-18.39",
-      "BG-3.8",
-      "BG-6.16"
+      "BG-6.16",
+      "BG-3.8"
     ]
   },
   {
@@ -362,8 +399,13 @@
     ],
     "verses": [
       "BG-18.66",
+      "BG-2.62",
+      "BG-2.63",
+      "BG-2.13",
       "BG-9.30",
-      "BG-4.36"
+      "BG-4.36",
+      "BG-2.20",
+      "BG-2.11"
     ]
   },
   {
@@ -402,10 +444,20 @@
       "should i work for"
     ],
     "verses": [
+      "SB-11.23.2",
       "BG-2.47",
       "BG-2.48",
+      "BG-18.47",
       "BG-3.19",
-      "BG-18.46"
+      "BG-5.18",
+      "BG-2.62",
+      "SB-11.23.42",
+      "BG-3.9",
+      "BG-2.63",
+      "BG-18.46",
+      "BG-18.66",
+      "BG-12.13",
+      "BG-12.18"
     ]
   },
   {
@@ -423,9 +475,11 @@
       "shraddha"
     ],
     "verses": [
+      "BG-6.5",
       "BG-18.66",
       "BG-12.8",
-      "BG-12.10"
+      "BG-12.10",
+      "BG-6.6"
     ]
   },
   {
@@ -459,9 +513,16 @@
       "does god see me"
     ],
     "verses": [
+      "BG-2.20",
+      "BG-12.10",
+      "BG-6.30",
+      "BG-6.26",
+      "BG-6.35",
+      "BG-6.34",
+      "BG-18.66",
       "BG-9.29",
-      "BG-10.20",
-      "BG-6.30"
+      "BG-12.8",
+      "BG-10.20"
     ]
   },
   {
@@ -479,6 +540,229 @@
       "BG-2.13",
       "BG-2.20",
       "BG-8.6"
+    ]
+  },
+  {
+    "theme": "ag_witness",
+    "synonyms": [
+      "witness consciousness",
+      "not this body",
+      "not the body",
+      "anxious body",
+      "beyond the fear",
+      "unchanging observer",
+      "pure witness",
+      "sakshi",
+      "who is watching",
+      "witness of all",
+      "formless witness",
+      "turbulent thoughts",
+      "separate from my thoughts",
+      "experience the self",
+      "existential dread",
+      "if any of it matters",
+      "going through the motions",
+      "existential emptiness"
+    ],
+    "verses": [
+      "AG-1.3",
+      "AG-1.7",
+      "AG-15.1",
+      "AG-2.1",
+      "AG-5.1"
+    ]
+  },
+  {
+    "theme": "ag_effortless",
+    "synonyms": [
+      "spiritual striving",
+      "improve myself spiritually",
+      "treadmill",
+      "effortless being",
+      "meditating to get enlightened",
+      "exhausted by constantly trying",
+      "striving to be free",
+      "stop striving",
+      "instrumentalizing practice",
+      "sitting with what is",
+      "effortless peace",
+      "torn between",
+      "renouncing everything",
+      "seek quiet",
+      "burnout",
+      "burning out",
+      "working late",
+      "not present",
+      "guilt around rest",
+      "guilty for not being more productive"
+    ],
+    "verses": [
+      "AG-1.13",
+      "AG-12.1",
+      "AG-12.7",
+      "AG-18.39"
+    ]
+  },
+  {
+    "theme": "ag_nondoer",
+    "synonyms": [
+      "non-doership",
+      "not the doer",
+      "i am the doer",
+      "kartritva",
+      "chasing better versions",
+      "who i am really becoming",
+      "ego of doing",
+      "drop this ego",
+      "black snake",
+      "imposter",
+      "fraud",
+      "exposed as a fraud",
+      "faking my way",
+      "incompetent",
+      "replaying mistakes",
+      "disappointing them",
+      "always disappointing"
+    ],
+    "verses": [
+      "AG-1.8",
+      "AG-1.16",
+      "AG-17.16",
+      "AG-4.5"
+    ]
+  },
+  {
+    "theme": "ag_mind_craving",
+    "synonyms": [
+      "mind races at night",
+      "craving distraction",
+      "cause of bondage",
+      "slipping through my hands",
+      "control everything",
+      "mind alone is the cause",
+      "quiet it",
+      "craving comfort",
+      "missing out",
+      "fomo",
+      "phone every few minutes",
+      "likes and comments"
+    ],
+    "verses": [
+      "AG-1.6",
+      "AG-1.11",
+      "AG-4.5",
+      "AG-18.42"
+    ]
+  },
+  {
+    "theme": "ag_liberation_dispassion",
+    "synonyms": [
+      "waiting for the right moment",
+      "attain liberation and dispassion",
+      "how is one to acquire knowledge",
+      "never satisfied",
+      "avoid the objects of the senses",
+      "timing of spiritual realization"
+    ],
+    "verses": [
+      "AG-1.1",
+      "AG-1.2",
+      "AG-1.4",
+      "AG-18.71"
+    ]
+  },
+  {
+    "theme": "ag_equanimity_criticism",
+    "synonyms": [
+      "comparing myself to others",
+      "criticism makes me want to hide",
+      "praise and blame",
+      "unmoved by praise",
+      "want to hide or fight back",
+      "equanimity in gain",
+      "insult",
+      "slander",
+      "speaking ill",
+      "ill of me",
+      "flip-flopping",
+      "feel behind",
+      "unsuccessful"
+    ],
+    "verses": [
+      "AG-17.7",
+      "AG-18.31",
+      "AG-18.48",
+      "AG-11.4"
+    ]
+  },
+  {
+    "theme": "ag_nondual_solitude",
+    "synonyms": [
+      "alone even when surrounded",
+      "alone even when i am surrounded",
+      "why do i feel so alone",
+      "no one understands me",
+      "non-dual awareness",
+      "sees no other",
+      "non-duality through the distinction",
+      "sorrow arising from attachment"
+    ],
+    "verses": [
+      "AG-2.2",
+      "AG-11.7",
+      "AG-18.52",
+      "AG-2.4",
+      "AG-2.11"
+    ]
+  },
+  {
+    "theme": "ag_wave_illusion",
+    "synonyms": [
+      "wave dissolving into water",
+      "wave is only water",
+      "wave on water",
+      "ocean and wave",
+      "illusion-like individuality",
+      "losing my identity when my plans fail"
+    ],
+    "verses": [
+      "AG-2.4",
+      "AG-1.7",
+      "AG-15.1"
+    ]
+  },
+  {
+    "theme": "ag_good_evil_freedom",
+    "synonyms": [
+      "good and evil",
+      "moral absolutism",
+      "cage i must leave behind",
+      "free from good and evil",
+      "righteousness and unrighteousness"
+    ],
+    "verses": [
+      "AG-1.6",
+      "AG-1.11",
+      "AG-18.42"
+    ]
+  },
+  {
+    "theme": "ag_space_peace",
+    "synonyms": [
+      "pure space",
+      "merges into pure space",
+      "unconditioned peace",
+      "sleeps without sleeping",
+      "acts without acting",
+      "transcend caste and rules",
+      "transcend rules and caste"
+    ],
+    "verses": [
+      "AG-1.20",
+      "AG-15.1",
+      "AG-18.15",
+      "AG-18.39",
+      "AG-1.5"
     ]
   }
 ]
