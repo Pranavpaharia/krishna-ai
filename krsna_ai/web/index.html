@@ -4,10 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Krishna — Ask, and be still</title>
-  <div class="language-selector" id="language-selector" style="display:none;">
-    <button class="button secondary small" data-lang="en">EN</button>
-    <button class="button secondary small" data-lang="hi">HI</button>
-  </div>
 <style>
   /*
     Open Design-ready token layer
@@ -33,8 +29,8 @@
     --od-color-border: rgba(232, 182, 76, .24);
     --od-color-border-soft: rgba(255, 255, 255, .10);
 
-    --od-font-display: 'Noto Serif Devanagari', 'Mangal', Georgia, "Times New Roman", serif;
-    --od-font-body: Inter, ui-sans-system, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif, 'Mangal', 'Nirmala UI';
+    --od-font-display: Georgia, "Times New Roman", serif;
+    --od-font-body: Inter, ui-sans-system, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
     --od-radius-sm: 12px;
     --od-radius-md: 18px;
@@ -536,12 +532,12 @@
         </div>
 
         <div class="suggestions" aria-label="Suggested questions">
-          <button class="chip" type="button" data-question="I am anxious about my future and cannot sleep">चिंता</button>
-          <button class="chip" type="button" data-question="I get angry very quickly and say things I regret. How do I control my temper?">क्रोध</button>
-          <button class="chip" type="button" data-question="I am grieving the loss of someone I love. How do I find peace?">शोक</button>
-          <button class="chip" type="button" data-question="I worked hard but failed. I feel like giving up.">असफलता</button>
-          <button class="chip" type="button" data-question="What is the purpose of my life? I feel directionless.">उद्देश्य</button>
-          <button class="chip" type="button" data-question="I keep fighting with my family. How should I respond?">पारिवारिक संघर्ष</button>
+          <button class="chip" type="button" data-question="I am anxious about my future and cannot sleep">😟 Anxiety</button>
+          <button class="chip" type="button" data-question="I get angry very quickly and say things I regret. How do I control my temper?">🔥 Anger</button>
+          <button class="chip" type="button" data-question="I am grieving the loss of someone I love. How do I find peace?">🕯️ Grief</button>
+          <button class="chip" type="button" data-question="I worked hard but failed. I feel like giving up.">🌧️ Failure</button>
+          <button class="chip" type="button" data-question="What is the purpose of my life? I feel directionless.">🧭 Purpose</button>
+          <button class="chip" type="button" data-question="I keep fighting with my family. How should I respond?">🏠 Family conflict</button>
         </div>
 
         <div id="log" aria-live="polite">
@@ -591,193 +587,9 @@
   const newChatBtn = document.getElementById('new-chat');
   const corpusStatus = document.getElementById('corpus-status');
 
-  // Language support i18n
-  const SUPPORTED_LANGS = ['en', 'hi'];
-  const DEFAULT_LANG = 'en';
-  let currentLang = DEFAULT_LANG;
-
-  // UI strings per language
-  const LANG_STRINGS = {
-    en: {
-      placeholder: 'Ask Krishna… e.g. I feel stressed and lost. What should I do?',
-      newChat: 'New chat',
-      speaking: 'Krishna is listening',
-      retry: '↻ Retry last question',
-      citations_verified: '✓ citations verified',
-      citations_adjusted: '⚠ citations adjusted',
-      rewrite_failed: '⚠ rewrite failed · answer kept as drafted',
-      loading_verse: 'Loading verse…',
-      verse_title: 'Verse from the book',
-      verse_unavailable: 'That reference could not be loaded. Please try again.',
-      source_note: 'Source: {book}, PDF page {page}. This is the exact stored translation used by the citation checker.',
-      verse_open: 'Open a verse',
-      no_purport: 'No purport excerpt is stored for this verse.',
-      copy_copied: '✓ Copied',
-      copy_failed: 'Copy failed',
-      error_failed: 'Something failed while asking Krishna. Please check the connection and try again.',
-      start_disabled: 'Starting…',
-      // Chip labels (Hindi translations)
-      anxiety: 'चिंता',
-      anger: 'क्रोध',
-      grief: 'शोक',
-      failure: 'असफलता',
-      purpose: 'उद्देश्य',
-      family_conflict: 'पारिवारिक संघर्ष',
-    },
-    hi: {
-      placeholder: 'क्रishna… पूछें e.g. मुझे तनाव और अहसास है। मुझे क्या करना चाहिए?',
-      newChat: 'नया चैट',
-      speaking: 'कृष्ण सुन रहे हैं',
-      retry: '↻ दोबारा प्रयास',
-      citations_verified: '✓ संदर्भ verified',
-      citations_adjusted: '⚠ संदर्भ समायोजित',
-      rewrite_failed: '⚠ पुनर्लेखन failed · उत्तर यथावत',
-      loading_verse: 'श्लोक लोड हो रहा है…',
-      verse_title: 'अपेक्षित श्लोक',
-      verse_unavailable: 'वह संदर्भ लोड नहीं हो सका। कृपया फिर प्रयास करें।',
-      source_note: 'स्रोत: {book}, PDF page {page}. यह वही exact stored translation है जिसे citation checker द्वारा प्रयोग किया गया है।',
-      verse_open: 'श्लोक खोलें',
-      no_purport: 'इस श्लोक के लिए कोई purport excerpt stored नहीं है।',
-      copy_copied: '✓ Copied',
-      copy_failed: 'Copy failed',
-      error_failed: 'कृष्ण से पूछते समय त्रुटि। कृपया कनेक्शन जांचें और फिर प्रयास करें।',
-      start_disabled: 'शुरू हो रहा है…',
-      // Chip labels (Hindi)
-      anxiety: 'चिंता',
-      anger: 'क्रोध',
-      grief: 'शोक',
-      failure: 'असफलता',
-      purpose: 'उद्देश्य',
-      family_conflict: 'पारिवारिक संघर्ष',
-    },
-  };
-
-  // Language support i18n
-  const SUPPORTED_LANGS = ['en', 'hi'];
-  const DEFAULT_LANG = 'en';
-  let currentLang = DEFAULT_LANG;
-
-  // UI strings per language
-  const LANG_STRINGS = {
-    en: {
-      placeholder: 'Ask Krishna… e.g. I feel stressed and lost. What should I do?',
-      newChat: 'New chat',
-      speaking: 'Krishna is listening',
-      retry: '↻ Retry last question',
-      citations_verified: '✓ citations verified',
-      citations_adjusted: '⚠ citations adjusted',
-      rewrite_failed: '⚠ rewrite failed · answer kept as drafted',
-      loading_verse: 'Loading verse…',
-      verse_title: 'Verse from the book',
-      verse_unavailable: 'That reference could not be loaded. Please try again.',
-      source_note: 'Source: {book}, PDF page {page}. This is the exact stored translation used by the citation checker.',
-      verse_open: 'Open a verse',
-      no_purport: 'No purport excerpt is stored for this verse.',
-      copy_copied: '✓ Copied',
-      copy_failed: 'Copy failed',
-      error_failed: 'Something failed while asking Krishna. Please check the connection and try again.',
-      start_disabled: 'Starting…',
-      // Chip labels (Hindi translations)
-      anxiety: 'चिंता',
-      anger: 'क्रोध',
-      grief: 'शोक',
-      failure: 'असफलता',
-      purpose: 'उद्देश्य',
-      family_conflict: 'पारिवारिक संघर्ष',
-    },
-    hi: {
-      placeholder: 'क्रishna… पूछें e.g. मुझे तनाव और अहसास है। मुझे क्या करना चाहिए?',
-      newChat: 'नया चैट',
-      speaking: 'कृष्ण सुन रहे हैं',
-      retry: '↻ दोबारा प्रयास',
-      citations_verified: '✓ संदर्भ verified',
-      citations_adjusted: '⚠ संदर्भ समायोजित',
-      rewrite_failed: '⚠ पुनर्लेखन failed · उत्तर यथावत',
-      loading_verse: 'श्लोक लोड हो रहा है…',
-      verse_title: 'अपेक्षित श्लोक',
-      verse_unavailable: 'वह संदर्भ लोड नहीं हो सका। कृपया फिर प्रयास करें।',
-      source_note: 'स्रोत: {book}, PDF page {page}. यह वही exact stored translation है जिसे citation checker द्वारा प्रयोग किया गया है।',
-      verse_open: 'श्लोक खोलें',
-      no_purport: 'इस श्लोक के लिए कोई purport excerpt stored नहीं है।',
-      copy_copied: '✓ Copied',
-      copy_failed: 'Copy failed',
-      error_failed: 'कृष्ण से पूछते समय त्रुटि। कृपया कनेक्शन जांचें और फिर प्रयास करें।',
-      start_disabled: 'शुरू हो रहा है…',
-      // Chip labels (Hindi)
-      anxiety: 'चिंता',
-      anger: 'क्रोध',
-      grief: 'शोक',
-      failure: 'असफलता',
-      purpose: 'उद्देश्य',
-      family_conflict: 'पारिवारिक संघर्ष',
-    },
-  };
-
-  // Load saved language preference or default
-  function initLanguage() {
-    const saved = localStorage.getItem('krishna_lang');
-    if (saved && SUPPORTED_LANGS.includes(saved)) {
-      currentLang = saved;
-    }
-    updateLanguageUI();
-    updateStrings();
-  }
-
-  function updateLanguageUI() {
-    const selector = document.getElementById('language-selector');
-    if (!selector) return;
-    selector.style.display = 'flex';
-    selector.querySelectorAll('button').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.lang === currentLang);
-    });
-  }
-
-  function updateStrings() {
-    const strings = LANG_STRINGS[currentLang];
-
-    // Update placeholder
-    const input = document.getElementById('question');
-    if (input && input.placeholder) {
-      input.placeholder = strings.placeholder;
-    }
-
-    // Update send button text
-    const sendBtn = document.getElementById('send');
-    if (sendBtn) {
-      sendBtn.textContent = currentLang === 'hi' ? 'पूछें' : 'Ask';
-    }
-
-    // Update new chat button
-    const newChatBtn = document.getElementById('new-chat');
-    if (newChatBtn) {
-      newChatBtn.textContent = strings.newChat;
-    }
-
-    // Update chip labels
-    const chips = document.querySelectorAll('.chip');
-    chips.forEach((chip, i) => {
-      const question = chip.dataset.question;
-      if (strings[question]) {
-        chip.textContent = strings[question];
-      }
-    });
-  }
-
-  // Add click handlers for language buttons
-  document.addEventListener('DOMContentLoaded', () => {
-    const selector = document.getElementById('language-selector');
-    if (selector) {
-      selector.querySelectorAll('button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          currentLang = btn.dataset.lang;
-          localStorage.setItem('krishna_lang', currentLang);
-          updateLanguageUI();
-          updateStrings();
-        });
-      });
-    }
-    initLanguage();
-  });
+  // One persona speaks. The voice id and its display label are constants, not a choice.
+  const VOICE = 'krishna';
+  const SPEAKER_LABEL = '🪷 Krishna';
 
   const verseTitle = document.getElementById('verse-title');
   const verseEmpty = document.getElementById('verse-empty');
@@ -826,21 +638,21 @@
     const copyBtn = document.createElement('button');
     copyBtn.type = 'button';
     copyBtn.className = 'button secondary small';
-    copyBtn.textContent = strings.copy_copied;
+    copyBtn.textContent = '📋 Copy';
     copyBtn.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(answerText);
-        copyBtn.textContent = strings.copy_copied;
-        setTimeout(() => { copyBtn.textContent = strings.copy_copied; }, 1400);
+        copyBtn.textContent = '✓ Copied';
+        setTimeout(() => { copyBtn.textContent = '📋 Copy'; }, 1400);
       } catch (_) {
-        copyBtn.textContent = strings.copy_failed;
+        copyBtn.textContent = 'Copy failed';
       }
     });
     actions.appendChild(copyBtn);
 
     const badge = document.createElement('span');
     badge.className = 'badge' + (data.citations_ok ? '' : ' warn');
-    badge.textContent = data.citations_ok ? strings.citations_verified : strings.citations_adjusted;
+    badge.textContent = data.citations_ok ? '✓ citations verified' : '⚠ citations adjusted';
     actions.appendChild(badge);
 
     if (data.retry_error) {
@@ -868,7 +680,7 @@
     document.querySelectorAll('.ref-button.active').forEach(btn => btn.classList.remove('active'));
     if (button) button.classList.add('active');
 
-    verseTitle.textContent = strings.loading_verse;
+    verseTitle.textContent = 'Loading verse…';
     verseEmpty.classList.add('hidden');
     verseContent.classList.add('hidden');
 
@@ -877,18 +689,18 @@
       if (!res.ok) throw new Error('Verse request failed');
       const verse = await res.json();
 
-      verseTitle.textContent = strings.verse_title;
+      verseTitle.textContent = 'Verse from the book';
       verseRef.textContent = verse.ref;
       verseMeta.textContent = `${verse.book}${verse.chapter_title ? ' · ' + verse.chapter_title : ''}`;
       verseTranslation.textContent = '“' + verse.translation + '”';
-      versePurport.textContent = verse.purport || strings.no_purport;
+      versePurport.textContent = verse.purport || 'No purport excerpt is stored for this verse.';
       versePurportWrap.classList.toggle('hidden', !verse.purport);
-      verseSource.textContent = strings.source_note.replace('{book}', verse.book).replace('{page}', verse.pdf_page);
+      verseSource.textContent = `Source: ${verse.book}, PDF page ${verse.pdf_page}. This is the exact stored translation used by the citation checker.`;
       verseContent.classList.remove('hidden');
       document.querySelector('.verse-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } catch (_) {
-      verseTitle.textContent = strings.verse_unavailable;
-      verseEmpty.textContent = strings.verse_unavailable;
+      verseTitle.textContent = 'Verse unavailable';
+      verseEmpty.textContent = 'That reference could not be loaded. Please try again.';
       verseEmpty.classList.remove('hidden');
     }
   }
@@ -897,7 +709,7 @@
     busy = nextBusy;
     sendBtn.disabled = nextBusy;
     input.disabled = nextBusy;
-    sendBtn.textContent = nextBusy ? (currentLang === 'hi' ? 'कृष्ण सुन रहे हैं' : 'Listening…') : (currentLang === 'hi' ? 'पूछें' : 'Ask');
+    sendBtn.textContent = nextBusy ? 'Listening…' : 'Ask';
   }
 
   async function askQuestion(question) {
@@ -937,12 +749,12 @@
     } catch (error) {
       waiting.el.classList.add('error');
       waiting.body.textContent = error.message
-        || strings.error_failed;
+        || 'Something failed while asking Krishna. Please check the connection and try again.';
 
       const retry = document.createElement('button');
       retry.type = 'button';
       retry.className = 'button secondary small';
-      retry.textContent = strings.retry;
+      retry.textContent = '↻ Retry last question';
       retry.addEventListener('click', () => {
         waiting.el.remove();
         history = history.filter(item => item.content !== text || item.role !== 'user');
@@ -984,8 +796,8 @@
     logEl.innerHTML = '';
     logEl.appendChild(emptyState);
     emptyState.classList.remove('hidden');
-    verseTitle.textContent = strings.verse_open;
-    verseEmpty.textContent = strings.verse_unavailable;
+    verseTitle.textContent = 'Open a verse';
+    verseEmpty.textContent = 'After Krishna answers, click any gold reference button to inspect the exact verse here — book, chapter, translation, and PDF page.';
     verseEmpty.classList.remove('hidden');
     verseContent.classList.add('hidden');
     input.value = '';
