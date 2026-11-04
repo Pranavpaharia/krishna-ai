@@ -80,6 +80,7 @@ CHAT_MODEL = os.environ.get("KRSNA_CHAT_MODEL", "muse-wonder-1.0")
 CHAT_MODEL_FALLBACK = os.environ.get("KRSNA_CHAT_FALLBACK_MODEL", "muse-spark-1.3")
 EMBED_MODEL = os.environ.get("KRSNA_EMBED_MODEL", "nvidia/nemotron-3-embed-1b")
 EMBED_DIM = 2048  # verified against the gateway (probe, 2026-10-27)
+EMBED_TIMEOUT = float(os.environ.get("KRSNA_EMBED_TIMEOUT", "2.5"))
 
 # Completion budget. These are reasoning models and reasoning_tokens count against max_tokens:
 # observed runs spent 2.3k-3.5k tokens thinking on a ~2.1k-token prompt, so a 4000 cap sat right

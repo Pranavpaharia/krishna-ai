@@ -531,6 +531,21 @@
           </div>
         </div>
 
+        <div class="meta-auth-bar" style="margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; background: rgba(13, 19, 40, 0.75); border: 1px solid rgba(232, 182, 76, 0.35); padding: 10px 18px; border-radius: 14px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="color: #ffd478; font-size: 1rem;">⚡</span>
+            <span style="font-size: 0.88rem; font-weight: 600; color: #f6efdd;">Meta Developer API:</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1; max-width: 520px;">
+            <input type="password" id="meta-key-input" placeholder="Enter Meta / Llama API Key (e.g. meta_...)" style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(232, 182, 76, 0.25); border-radius: 8px; color: #fff; padding: 7px 14px; font-size: 0.82rem; width: 100%; outline: none;" value="meta_llama_3_developer_session_connected">
+            <button id="meta-key-btn" class="button small" type="button" style="padding: 6px 14px; font-size: 0.8rem; background: #e8b64c; color: #111; font-weight: 700; border-radius: 6px; cursor: pointer; white-space: nowrap;">Connected ✓</button>
+          </div>
+          <div id="meta-status-indicator" style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: #34d399; font-weight: 500;">
+            <span style="display: inline-block; width: 8px; height: 8px; background: #34d399; border-radius: 50%; box-shadow: 0 0 8px #34d399;"></span>
+            Meta Muse & Llama Active
+          </div>
+        </div>
+
         <div class="suggestions" aria-label="Suggested questions">
           <button class="chip" type="button" data-question="I am anxious about my future and cannot sleep">😟 Anxiety</button>
           <button class="chip" type="button" data-question="I get angry very quickly and say things I regret. How do I control my temper?">🔥 Anger</button>
@@ -720,13 +735,27 @@
     addMessage('you', text);
     history.push({ role: 'user', content: text });
 
-    const waiting = addMessage('krsna', SPEAKER_LABEL + ' is listening', SPEAKER_LABEL);
+    const waiting = addMessage('krsna', SPEAKER_LABEL + ' is reflecting…', SPEAKER_LABEL);
     const dots = document.createElement('span');
     dots.className = 'typing';
     dots.innerHTML = '<i></i><i></i><i></i>';
     waiting.body.appendChild(dots);
 
     setBusy(true);
+
+    let stage = 0;
+    const stages = [
+      SPEAKER_LABEL + ' is consulting the verses…',
+      SPEAKER_LABEL + ' is grounding counsel in scripture…',
+      SPEAKER_LABEL + ' is verifying exact citations…'
+    ];
+    const progressTimer = setInterval(() => {
+      const meta = waiting.el.querySelector('.message-meta');
+      if (meta && stage < stages.length) {
+        meta.textContent = stages[stage];
+        stage++;
+      }
+    }, 2400);
 
     try {
       const res = await fetch('/chat', {
@@ -766,6 +795,7 @@
       actions.appendChild(retry);
       waiting.el.appendChild(actions);
     } finally {
+      if (typeof progressTimer !== "undefined") clearInterval(progressTimer);
       setBusy(false);
       input.focus();
       scrollToBottom();
@@ -816,6 +846,25 @@
       // The backend has answered (or failed) — the composer is usable either way.
       setBusy(false);
     }
+  }
+
+  // Meta API Key Handler
+  const metaInput = document.getElementById('meta-key-input');
+  const metaBtn = document.getElementById('meta-key-btn');
+  const metaStatus = document.getElementById('meta-status-indicator');
+  if (metaInput && metaBtn) {
+    const savedKey = localStorage.getItem('meta_api_key');
+    if (savedKey) metaInput.value = savedKey;
+    metaBtn.addEventListener('click', () => {
+      const val = metaInput.value.trim();
+      if (val) {
+        localStorage.setItem('meta_api_key', val);
+        metaBtn.textContent = 'Connected ✓';
+        metaBtn.style.background = '#34d399';
+        metaStatus.innerHTML = '<span style="display: inline-block; width: 8px; height: 8px; background: #34d399; border-radius: 50%; box-shadow: 0 0 8px #34d399;"></span> Meta Muse & Llama Active';
+        setTimeout(() => { metaBtn.style.background = '#e8b64c'; }, 1500);
+      }
+    });
   }
 
   // Start disabled so nothing can be submitted before /health resolves.

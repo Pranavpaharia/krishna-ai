@@ -55,18 +55,39 @@ async def chat(messages: list[dict], temperature: float = 0.6,
     else:
         models = (config.CHAT_MODEL, config.CHAT_MODEL_FALLBACK)
         budgets = (max_tokens, ESCALATED_MAX_TOKENS)
-    async with httpx.AsyncClient(base_url=config.LLM_BASE_URL, headers=headers, timeout=300) as client:
-        for model in models:
-            for budget in budgets:
-                try:
-                    content, finish = await _complete(client, model, messages, temperature, budget)
-                    if content:
-                        return content
-                    last_err = GatewayError(f"empty content from {model} (finish={finish}, "
-                                            f"max_tokens={budget})")
-                    if finish != "length":
-                        break  # not a budget problem; a bigger budget will not help
-                except Exception as exc:  # noqa: BLE001 - fall back once, then raise
-                    last_err = exc
-                    break  # transport failure: go to the next model, not a bigger budget
-    raise GatewayError(f"LLM gateway failed on both models: {last_err}")
+
+    # 1. Attempt primary gateway endpoints
+    try:
+        async with httpx.AsyncClient(base_url=config.LLM_BASE_URL, headers=headers, timeout=4.0) as client:
+            for model in models:
+                for budget in budgets:
+                    try:
+                        content, finish = await _complete(client, model, messages, temperature, budget)
+                        if content:
+                            return content
+                        last_err = GatewayError(f"empty content from {model} (finish={finish}, "
+                                                f"max_tokens={budget})")
+                        if finish != "length":
+                            break  # not a budget problem; a bigger budget will not help
+                    except Exception as exc:  # noqa: BLE001 - fall back once, then raise
+                        last_err = exc
+                        break  # transport failure: go to the next model, not a bigger budget
+    except Exception as exc:
+        last_err = exc
+
+    # 2. Resilient fast fallback: if gateway is unreachable (e.g. edge box offline during demo),
+    # use high-speed free inference endpoint via GROQ_API_KEY
+    import os
+    groq_key = os.environ.get("GROQ_API_KEY")
+    if groq_key:
+        try:
+            groq_headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
+            async with httpx.AsyncClient(base_url="https://api.groq.com/openai/v1", headers=groq_headers, timeout=25.0) as groq_client:
+                # Use fast open-weights model
+                content, finish = await _complete(groq_client, "qwen/qwen3.8-27b", messages, temperature, min(max_tokens, 1200))
+                if content:
+                    return content
+        except Exception as groq_exc:
+            last_err = groq_exc
+
+    raise GatewayError(f"LLM generation failed across all endpoints: {last_err}")

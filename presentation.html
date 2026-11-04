@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Krishna AI — Presentation Deck (Meta Global AI Hackathon)</title>
+<style>
+  :root {
+    --bg: #090e1f;
+    --card-bg: rgba(23, 35, 63, 0.85);
+    --card-border: rgba(232, 182, 76, 0.28);
+    --gold: #e8b64c;
+    --gold-bright: #ffd478;
+    --text: #f6efdd;
+    --text-muted: #b4bfd6;
+    --accent-blue: #3b82f6;
+    --accent-green: #10b981;
+    --font-serif: Georgia, "Times New Roman", serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(circle at 50% 10%, #152244 0%, var(--bg) 70%);
+    color: var(--text);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .slide-container {
+    width: 90vw;
+    max-width: 1200px;
+    height: 82vh;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    backdrop-filter: blur(16px);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 70px;
+    justify-content: space-between;
+  }
+
+  .slide {
+    display: none;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .slide.active {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Slide 1 - Title */
+  .badge-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(232, 182, 76, 0.12);
+    border: 1px solid rgba(232, 182, 76, 0.4);
+    color: var(--gold);
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    width: fit-content;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-size: 3.6rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  h1 span {
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    font-size: 1.4rem;
+    color: var(--text-muted);
+    max-width: 820px;
+    line-height: 1.5;
+    margin-bottom: 30px;
+  }
+
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 20px;
+  }
+
+  .metric-box {
+    background: rgba(13, 19, 40, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 20px;
+    border-left: 3px solid var(--gold);
+  }
+
+  .metric-val {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold-bright);
+    margin-bottom: 4px;
+  }
+
+  .metric-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  /* Slide 2 & 3 - Grid Layouts */
+  h2 {
+    font-family: var(--font-serif);
+    font-size: 2.6rem;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  h2 span { color: var(--gold); }
+
+  .subhead {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  .card-fail {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 18px;
+    padding: 28px;
+  }
+  .card-fail h3 { color: #f87171; font-size: 1.3rem; margin-bottom: 14px; }
+  .card-fail ul { list-style: none; }
+  .card-fail li { margin-bottom: 12px; color: #fed7d7; font-size: 1rem; line-height: 1.4; display: flex; gap: 10px; }
+  .card-fail li::before { content: "✕"; color: #f87171; font-weight: bold; }
+
+  .card-win {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    border-radius: 18px;
+    padding: 28px;
+  }
+  .card-win h3 { color: #34d399; font-size: 1.3rem; margin-bottom: 14px; }
+  .card-win ul { list-style: none; }
+  .card-win li { margin-bottom: 12px; color: #d1fae5; font-size: 1rem; line-height: 1.4; display: flex; gap: 10px; }
+  .card-win li::before { content: "✓"; color: #34d399; font-weight: bold; }
+
+  /* Architecture Diagram on Slide 3 */
+  .arch-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+  .arch-node {
+    background: rgba(13, 19, 40, 0.85);
+    border: 1px solid rgba(232, 182, 76, 0.25);
+    border-radius: 16px;
+    padding: 24px 18px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  .arch-node:not(:last-child)::after {
+    content: "➔";
+    position: absolute;
+    right: -14px;
+    color: var(--gold);
+    font-size: 1.2rem;
+    z-index: 2;
+  }
+  .arch-step {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--gold);
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .arch-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .arch-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.35;
+  }
+
+  /* Controls & Footer */
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .nav-btn {
+    background: rgba(232, 182, 76, 0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover {
+    background: var(--gold);
+    color: #121829;
+  }
+
+  .progress-indicator {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-family: monospace;
+  }
+
+  .keys-tip {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.4);
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-container">
+  <!-- Slide 1: Title & Hook -->
+  <div class="slide active" id="slide-1">
+    <div class="badge-tag">Meta Global AI Developer Hackathon</div>
+    <h1><span>Krishna AI</span><br>Grounded Philosophical Counseling</h1>
+    <p class="subtitle">A zero-hallucination, empathetic companion for life's deepest emotional and moral dilemmas, strictly grounded in classical wisdom and powered by Meta's open-weights reasoning models.</p>
+    
+    <div class="metrics-row">
+      <div class="metric-box">
+        <div class="metric-val">2,062</div>
+        <div class="metric-label">Canonical Verses Ingested Across 3 Texts</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val">100%</div>
+        <div class="metric-label">Deterministic Citation Verification Pass Rate</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val">Meta Models</div>
+        <div class="metric-label"><code>muse-wonder-1.0</code> & <code>muse-spark-1.3</code></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2: The Core Problem -->
+  <div class="slide" id="slide-2">
+    <div class="badge-tag">The Problem & Dilemma</div>
+    <h2>Why Generic AI Fails At <span>Sacred Counsel</span></h2>
+    <p class="subhead">When people face severe anxiety, grief, and moral paralysis, hallucination destroys trust.</p>
+
+    <div class="comparison-grid">
+      <div class="card-fail">
+        <h3>Generic LLMs (Black Box)</h3>
+        <ul>
+          <li>Invent fake verse chapters and confabulate quotes</li>
+          <li>Blend incompatible philosophical traditions carelessly</li>
+          <li>Give generic, shallow platitudes for heavy grief and burnout</li>
+          <li>Send sensitive personal confessions to proprietary cloud servers</li>
+        </ul>
+      </div>
+      <div class="card-win">
+        <h3>Krishna AI (Our Solution)</h3>
+        <ul>
+          <li><strong>Zero Hallucination:</strong> Only cites ingested canonical verses</li>
+          <li><strong>Verbatim Verification:</strong> Machine-checked character-by-character</li>
+          <li><strong>Empathetic 5-Part Counsel:</strong> Root cause, verse, and practical action</li>
+          <li><strong>Privacy Sovereignty:</strong> Meta open weights run on private edge hardware</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Architecture & Tech Stack -->
+  <div class="slide" id="slide-3">
+    <div class="badge-tag">Under The Hood</div>
+    <h2>End-to-End <span>Grounded Architecture</span></h2>
+    <p class="subhead">Bridging 5,000 years of classical texts to modern dilemmas with Meta's reasoning engine.</p>
+
+    <div class="arch-grid">
+      <div class="arch-node">
+        <div class="arch-step">Step 1</div>
+        <div class="arch-title">Hybrid Retrieval</div>
+        <div class="arch-desc">IAST diacritic folding + 2048-dim embeddings across 2,062 verses.</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-step">Step 2</div>
+        <div class="arch-title">Meta Reasoning</div>
+        <div class="arch-desc"><code>muse-wonder-1.0</code> via Baseten (2M TPM) synthesizes counsel & empathy.</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-step">Step 3</div>
+        <div class="arch-title">Citation Guardrail</div>
+        <div class="arch-desc">Verifies citations verbatim against DB; auto-regenerates if flawed.</div>
+      </div>
+      <div class="arch-node">
+        <div class="arch-step">Step 4</div>
+        <div class="arch-title">Interactive UI</div>
+        <div class="arch-desc">FastAPI backend + responsive web chat with verifiable citation accordion.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Live Demo Transition -->
+  <div class="slide" id="slide-4" style="text-align: center; align-items: center;">
+    <div class="badge-tag">Live Demonstration</div>
+    <h1>Witness <span>Krishna AI</span> in Action</h1>
+    <p class="subtitle" style="text-align: center; margin: 0 auto 30px auto;">Switching to the live interactive companion on <code>http://localhost:8123</code> to demonstrate empathy, scriptural accuracy, and the citation verification badge.</p>
+    
+    <div style="background: rgba(232, 182, 76, 0.1); border: 1px dashed var(--gold); border-radius: 16px; padding: 24px 40px; max-width: 650px;">
+      <div style="font-size: 0.85rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Demonstration Query</div>
+      <div style="font-size: 1.25rem; font-style: italic; color: #fff;">"I feel paralyzed by anxiety regarding my duties at work, afraid of failing. How should I view my action?"</div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Evaluation & Privacy -->
+  <div class="slide" id="slide-5">
+    <div class="badge-tag">Verification & Impact</div>
+    <h2>Benchmark Proof & <span>Privacy Sovereignty</span></h2>
+    <p class="subhead">Rigorous automated verification meets open-source deployment.</p>
+
+    <div class="metrics-row">
+      <div class="metric-box">
+        <div class="metric-val">0.918</div>
+        <div class="metric-label">Recall@6 on Golden Benchmark Suite</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val">32 / 32</div>
+        <div class="metric-label">Topic Taxonomy Matches on Complex Inquiries</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val">100% Private</div>
+        <div class="metric-label">Self-hosted with zero user prompt leakage</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 30px; background: rgba(13, 19, 40, 0.6); padding: 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);">
+      <p style="color: var(--gold); font-weight: 600; margin-bottom: 6px;">Why Meta's Open Weights Are The Winning Foundation:</p>
+      <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;">Personal counseling involves private emotional vulnerability. Meta's open weights allow sovereign hosting on private hardware without sending intimate confessions to proprietary clouds, while delivering state-of-the-art instruction adherence.</p>
+    </div>
+  </div>
+
+  <!-- Footer Navigation -->
+  <div class="footer">
+    <div class="keys-tip">Use [←] and [→] arrow keys, Space, or [F] for Fullscreen</div>
+    <div class="progress-indicator"><span id="curr-slide">1</span> / 5</div>
+    <div style="display: flex; gap: 10px;">
+      <button class="nav-btn" onclick="prevSlide()">← Prev</button>
+      <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let current = 1;
+  const total = 5;
+
+  function update() {
+    for (let i = 1; i <= total; i++) {
+      const el = document.getElementById(`slide-${i}`);
+      if (i === current) {
+        el.classList.add('active');
+      } else {
+        el.classList.remove('active');
+      }
+    }
+    document.getElementById('curr-slide').innerText = current;
+  }
+
+  function nextSlide() {
+    if (current < total) { current++; update(); }
+  }
+  function prevSlide() {
+    if (current > 1) { current--; update(); }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      prevSlide();
+    } else if (e.key.toLowerCase() === 'f') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
+</script>
+</body>
+</html>

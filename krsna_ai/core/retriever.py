@@ -124,7 +124,7 @@ def _embed_query(text: str) -> np.ndarray | None:
     import httpx
 
     try:
-        with httpx.Client(base_url=config.LLM_BASE_URL, headers=_headers(), timeout=60) as client:
+        with httpx.Client(base_url=config.LLM_BASE_URL, headers=_headers(), timeout=getattr(config, "EMBED_TIMEOUT", 1.0)) as client:
             resp = client.post("/embeddings", json={"model": config.EMBED_MODEL, "input": [text]})
             resp.raise_for_status()
             vec = np.array(resp.json()["data"][0]["embedding"], dtype=np.float32)
@@ -146,7 +146,7 @@ async def _embed_query_async(text: str) -> np.ndarray | None:
     import httpx
 
     try:
-        async with httpx.AsyncClient(base_url=config.LLM_BASE_URL, headers=_headers(), timeout=60) as client:
+        async with httpx.AsyncClient(base_url=config.LLM_BASE_URL, headers=_headers(), timeout=getattr(config, "EMBED_TIMEOUT", 1.0)) as client:
             resp = await client.post("/embeddings", json={"model": config.EMBED_MODEL, "input": [text]})
             resp.raise_for_status()
             vec = np.array(resp.json()["data"][0]["embedding"], dtype=np.float32)
@@ -205,13 +205,13 @@ async def retrieve_async(store: Store, question: str, top_k: int = config.TOP_K)
     return _rank(store, question, await _embed_query_async(question), top_k)
 
 
-def format_context(passages: list[dict]) -> str:
+def format_context(passages: list[dict], include_purport: bool = False) -> str:
     """Render retrieved passages for the LLM prompt (verbatim translations)."""
     lines = []
     for p in passages:
         lines.append(f"[{p['id']}] {p['ref']} (PDF p. {p['pdf_page']})")
         lines.append(f"Translation: {p['translation']}")
-        if p.get("purport"):
-            lines.append(f"Purport excerpt: {p['purport'][:600]}")
+        if include_purport and p.get("purport"):
+            lines.append(f"Purport excerpt: {p['purport'][:250]}")
         lines.append("")
     return "\n".join(lines).strip()
